@@ -4,6 +4,8 @@ To get started, please follow these instructions. I highly recommend using a vir
 
 https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 
+Our Link to Heroku is https://rate-my-ta.herokuapp.com/
+
 This project is set up using python 3.
 
 - Install all  the dependencies into your virtual environment
