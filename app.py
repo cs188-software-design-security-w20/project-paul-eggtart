@@ -7,9 +7,14 @@ from flask import (
     url_for
 )
 from router.router import router
+from flask_wtf.csrf import CSRFProtect
 
+
+csrf = CSRFProtect(app)
+csrf = CSRFProtect()
 def create_app(config_file):
     app = Flask(__name__)
+    csrf.init_app(app)
     app.config.from_object(config_file)
     app.register_blueprint(router, url='/router')
     css = Blueprint(
@@ -23,6 +28,7 @@ def create_app(config_file):
     return app
 
 app = create_app('config')
+
 
 @app.route('/')
 def index():
