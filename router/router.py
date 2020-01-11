@@ -8,6 +8,7 @@ from flask import (
 )
 
 from forms import forum
+from search import searchBar
 ########################## Firebase Portion
 import os
 import pyrebase
@@ -42,9 +43,17 @@ router = Blueprint(
     template_folder='../templates'
 )
 
-@router.route('/TA-Paul-Eggtart', methods=['GET', 'POST'])
-def TA_Paul_Eggtart():
-    return render_template('ta_page.html')
+@router.route('/TA/<ta_name>', methods=['GET', 'POST'])
+def TA(ta_name):
+    ta_info = []
+    ta = db.child("TA").child(ta_name).get()
+    name = ta.key()
+    comments = []
+    for _, val in ta.val().items():
+      comments.append(val['comment'])
+    ta_info.append( (name,comments))
+
+    return render_template('ta_page.html',ta_info=ta_info)
 
 
 @router.route('/debug', methods=['GET', 'POST'])
@@ -61,13 +70,20 @@ def debug():
     return render_template('debug.html',ta_arr=ta_arr)
 
 
+@router.route('/search', methods=['GET', 'POST'])
+def search():
+    search = searchBar()
+    if search.validate_on_submit():
+        return redirect('/TA/'+ search.ta_name.data)
+    return render_template('search.html', form=search)  
+
 
 @router.route('/submit', methods=['GET', 'POST'])
 def submit():
     form = forum()
     if form.validate_on_submit():
-        db.child("TA").child("Paul Eggert").push({"comment": form.comment.data})
-        return redirect('/TA-Paul-Eggtart')
+        db.child("TA").child("kevin zhang").push({"comment": form.comment.data})
+        return redirect('/TA')
     return render_template('register.html', form=form)
 
 
