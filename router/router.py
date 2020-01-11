@@ -53,21 +53,14 @@ def TA(ta_name):
       comments.append(val['comment'])
     ta_info.append( (name,comments))
 
-    return render_template('ta_page.html',ta_info=ta_info)
 
-
-@router.route('/debug', methods=['GET', 'POST'])
-def debug():
-    ta_arr_db = db.child("TA").get()
-    ta_arr = []
-    for ta in ta_arr_db.each():
-      name = ta.key() #name
-      comments = []
-      for _, val in ta.val().items():
-        comments.append(val['comment'])
-      ta_arr.append( (name,comments))
-
-    return render_template('debug.html',ta_arr=ta_arr)
+    #rating the TA
+    form = forum()
+    if form.validate_on_submit():
+        print(form.comment.data)
+        db.child("TA").child(ta_name).push({"comment": form.comment.data})
+        return redirect('/TA/'+ta_name)
+    return render_template('ta_page.html',ta_info=ta_info,redirect='/TA/'+ta_name,form=form)
 
 
 @router.route('/search', methods=['GET', 'POST'])
@@ -76,15 +69,6 @@ def search():
     if search.validate_on_submit():
         return redirect('/TA/'+ search.ta_name.data)
     return render_template('search.html', form=search)  
-
-
-@router.route('/submit', methods=['GET', 'POST'])
-def submit():
-    form = forum()
-    if form.validate_on_submit():
-        db.child("TA").child("kevin zhang").push({"comment": form.comment.data})
-        return redirect('/TA')
-    return render_template('register.html', form=form)
 
 
 
