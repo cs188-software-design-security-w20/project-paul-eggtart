@@ -11,11 +11,12 @@ from flask_wtf.csrf import CSRFProtect
 
 
 
-
 def create_app(config_file):
     app = Flask(__name__)
     csrf = CSRFProtect(app)
     csrf = CSRFProtect()
+    app.config['SECRET_KEY'] = 'any secret string'
+    
     csrf.init_app(app)
     app.config.from_object(config_file)
     app.register_blueprint(router, url='/router')
@@ -30,6 +31,9 @@ def create_app(config_file):
     return app
 
 app = create_app('config')
+
+
+
 
 
 @app.route('/')

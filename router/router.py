@@ -4,8 +4,10 @@ from flask import (
     redirect,
     url_for,
     render_template
+
 )
 
+from forms import forum
 ########################## Firebase Portion
 import os
 import pyrebase
@@ -40,11 +42,35 @@ router = Blueprint(
     template_folder='../templates'
 )
 
-@router.route('/TA-Paul-Eggtart', methods=['GET'])
+@router.route('/TA-Paul-Eggtart', methods=['GET', 'POST'])
 def TA_Paul_Eggtart():
-    data = {"name": "Joe Tilsed"}
-    db.child("users").child("Joe").set(data)
     return render_template('ta_page.html')
+
+
+@router.route('/debug', methods=['GET', 'POST'])
+def debug():
+    ta_arr_db = db.child("TA").get()
+    ta_arr = []
+    for ta in ta_arr_db.each():
+      name = ta.key() #name
+      comments = []
+      for _, val in ta.val().items():
+        comments.append(val['comment'])
+      ta_arr.append( (name,comments))
+
+    return render_template('debug.html',ta_arr=ta_arr)
+
+
+
+@router.route('/submit', methods=['GET', 'POST'])
+def submit():
+    form = forum()
+    if form.validate_on_submit():
+        db.child("TA").child("Paul Eggert").push({"comment": form.comment.data})
+        return redirect('/TA-Paul-Eggtart')
+    return render_template('register.html', form=form)
+
+
 
 @router.route('/')
 def home():

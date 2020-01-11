@@ -35,3 +35,6 @@ $ python3 app.py
 
 ## Sources
 - https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+
+## Firebase documentation
+- https://github.com/thisbejim/Pyrebase 
