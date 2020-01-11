@@ -10,10 +10,12 @@ from router.router import router
 from flask_wtf.csrf import CSRFProtect
 
 
-csrf = CSRFProtect(app)
-csrf = CSRFProtect()
+
+
 def create_app(config_file):
     app = Flask(__name__)
+    csrf = CSRFProtect(app)
+    csrf = CSRFProtect()
     csrf.init_app(app)
     app.config.from_object(config_file)
     app.register_blueprint(router, url='/router')
