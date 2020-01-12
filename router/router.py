@@ -80,7 +80,7 @@ def TA(ta_name):
 def search():
     search = searchBar()
     if search.validate_on_submit():
-        return redirect('/TA/'+ search.ta_name.data)
+        return redirect('/TA/'+search.ta_name.data)
     return render_template('search.html', form=search)  
 
 

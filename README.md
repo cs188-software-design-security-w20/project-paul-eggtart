@@ -3,6 +3,7 @@
 ## Table of Contents
 * [Introduction](#intro)
 * [Getting Started](#getting-started)
+* [Navigating the Site](#navigating-the-site)
 * [Sources](#sources)
 
 ## Introduction
@@ -33,8 +34,15 @@ $ pip install -r requirements.txt
 $ python3 app.py
 ```
 
+## Navigating the Site
+- /TA/paul-eggert
+- /search
+
 ## Sources
 - https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
+- https://materializecss.com/
+- https://wtforms.readthedocs.io/en/stable/
+- https://pypi.org/project/wtforms-html5/
 
 ## Firebase documentation
 - https://github.com/thisbejim/Pyrebase 
