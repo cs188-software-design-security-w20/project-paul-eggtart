@@ -35,8 +35,6 @@ firebase = pyrebase.initialize_app(config)
 db = firebase.database()
 ########################## Firebase Portion
 
-
-
 router = Blueprint(
     'router',
     __name__,
@@ -60,7 +58,8 @@ def TA(ta_name):
         print(form.comment.data)
         db.child("TA").child(ta_name).push({"comment": form.comment.data})
         return redirect('/TA/'+ta_name)
-    return render_template('ta_page.html',ta_info=ta_info,redirect='/TA/'+ta_name,form=form)
+
+    return render_template('ta_page.html',ta_info=ta_info,redirect='/TA/'+ta_name,form=form, ta_jpg= ta_name+".jpg" )
 
 
 @router.route('/search', methods=['GET', 'POST'])
