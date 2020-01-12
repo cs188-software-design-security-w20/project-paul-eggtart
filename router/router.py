@@ -12,35 +12,6 @@ from load import database
 db = database()#define database
 
 
-
-########################## Firebase Portion
-import os
-import pyrebase
-from dotenv import load_dotenv
-
-# LOAD ENVIRONMENT VARIABLES 
-load_dotenv()
-load_dotenv(verbose=True)
-from pathlib import Path  
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
-#LOAD ENVIRONMENT VARIABLES
-
-config = {
-    "apiKey": os.environ.get('FIREBASE_API_KEY'),
-    "authDomain": "rate-my-ta.firebaseapp.com",
-    "databaseURL": "https://rate-my-ta.firebaseio.com",
-    "projectId": "rate-my-ta",
-    "storageBucket": "rate-my-ta.appspot.com",
-    "serviceAccount": "key/firebase-key.json",
-    "messagingSenderId": "358133458427"
-}
-
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
-########################## Firebase Portion
-
-
 router = Blueprint(
     'router',
     __name__,
@@ -48,17 +19,19 @@ router = Blueprint(
 )
 
 
-
 @router.route('/TA/<ta_name>', methods=['GET', 'POST'])
 def TA(ta_name):
     ta_info = []
     ta = db.child("TA").child(ta_name).get()
-    name = ta.key()
     comments = []
     for _, val in ta.val().items():
-        if val["comment"]:
+        if val.get("comment")!= None: #comment
             comments.append(val["comment"])
-    ta_info.append((name,comments))
+
+        elif val.get("rating")!= None: # rating
+            print(val["rating"])
+
+    ta_info.append((ta_name,comments))
 
     # adding comment to forum
     my_comment = comment_form()
