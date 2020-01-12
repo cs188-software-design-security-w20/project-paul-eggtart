@@ -34,8 +34,6 @@ app = create_app('config')
 
 
 
-
-
 @app.route('/')
 def index():
     return redirect(url_for('router.home'))
