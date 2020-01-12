@@ -8,6 +8,7 @@ from flask import (
 )
 
 from forms import forum
+from forms import slider
 from search import searchBar
 ########################## Firebase Portion
 import os
@@ -59,7 +60,11 @@ def TA(ta_name):
         db.child("TA").child(ta_name).push({"comment": form.comment.data})
         return redirect('/TA/'+ta_name)
 
-    return render_template('ta_page.html',ta_info=ta_info,redirect='/TA/'+ta_name,form=form, ta_jpg= ta_name+".jpg" )
+    slider2 = slider()
+    if slider2.validate_on_submit():
+      print(slider2.clarity.data)
+
+    return render_template('ta_page.html',ta_info=ta_info,redirect='/TA/'+ta_name,form=form, ta_jpg= ta_name+".jpg", slider=slider2 )
 
 
 @router.route('/search', methods=['GET', 'POST'])
