@@ -63,7 +63,6 @@ def TA(ta_name):
     # adding comment to forum
     my_comment = comment_form()
     if my_comment.validate_on_submit():
-        print(my_comment.comment.data)
         db.child("TA").child(ta_name).push({"comment": my_comment.comment.data})
         return redirect('/TA/'+ta_name)
     
