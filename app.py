@@ -8,14 +8,14 @@ from flask import (
 )
 from router.router import router
 from flask_wtf.csrf import CSRFProtect
-
-
+import load
 
 def create_app(config_file):
     app = Flask(__name__, static_url_path = "/images", static_folder = "images")
     csrf = CSRFProtect(app)
     csrf = CSRFProtect()
-    app.config['SECRET_KEY'] = 'any secret string'
+    app.config['SECRET_KEY'] = os.environ.get("CSRF_KEY_SECRET")
+
     
     csrf.init_app(app)
     app.config.from_object(config_file)

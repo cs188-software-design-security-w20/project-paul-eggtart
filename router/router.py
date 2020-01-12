@@ -10,31 +10,9 @@ from flask import (
 from forms import forum
 from forms import slider
 from search import searchBar
-########################## Firebase Portion
-import os
-import pyrebase
-from dotenv import load_dotenv
-# LOAD ENVIRONMENT VARIABLES 
-load_dotenv()
-load_dotenv(verbose=True)
-from pathlib import Path  
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
-#LOAD ENVIRONMENT VARIABLES
+from load import database
 
-config = {
-  "apiKey": os.environ.get('FIREBASE_API_KEY'),
-  "authDomain": "rate-my-ta.firebaseapp.com",
-  "databaseURL": "https://rate-my-ta.firebaseio.com",
-  "projectId": "rate-my-ta",
-  "storageBucket": "rate-my-ta.appspot.com",
-  "serviceAccount": "key/firebase-key.json",
-  "messagingSenderId": "358133458427"
-}
-
-firebase = pyrebase.initialize_app(config)
-db = firebase.database()
-########################## Firebase Portion
+db = database()#define database
 
 router = Blueprint(
     'router',
@@ -56,9 +34,9 @@ def TA(ta_name):
     #rating the TA
     form = forum()
     if form.validate_on_submit():
-        print(form.comment.data)
         db.child("TA").child(ta_name).push({"comment": form.comment.data})
         return redirect('/TA/'+ta_name)
+
 
     slider2 = slider()
     if slider2.validate_on_submit():
