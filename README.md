@@ -38,6 +38,19 @@ $ python3 app.py
 - /TA/paul-eggert
 - /search
 
+## Example Search (Exact words case sensitive)
+- tian-ye 
+
+## In Progress
+- Ratings Connect Backend To Frontend
+
+## TO-DO
+- Payment System
+- Search Page
+- Login 
+- Signup
+
+
 ## Sources
 - https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/
 - https://materializecss.com/
