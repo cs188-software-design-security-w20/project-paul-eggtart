@@ -8,6 +8,7 @@ from flask import (
 from custom_wtforms.forum_forms import comment_form, rating_form
 from search import searchBar
 from load import database
+from forms import forum
 import datetime
 
 db = database() #define database
@@ -35,12 +36,15 @@ def TA(ta_name):
     ta_info= (ta_name,data) 
 
     # adding comment to forum
-    my_comment = comment_form()
+    my_comment = forum()
     if my_comment.validate_on_submit():
+
         db.child("TA").child(ta_name).push({"comment": my_comment.comment.data,
                                         "timestamp": str(datetime.datetime.now()) })
         return redirect('/TA/'+ta_name)
-    
+    else:
+        print("error, too long")
+        
     # addint rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
