@@ -25,7 +25,7 @@
 
 				    </div>
 				    <div class="card-content">
-				      <span class="card-title activator grey-text text-darken-4">{{ta_info[0][0]}}<i class="material-icons right">lock_outline</i></span>
+				      <span class="card-title activator grey-text text-darken-4">{{ta_info[0]}}<i class="material-icons right">lock_outline</i></span>
 				      <p>Ratings</p>
 				    </div>
 				    <div class="card-reveal">
@@ -51,13 +51,17 @@
 <div class="row">
 	<div class="col s12 m6 offset-m3">
 		<div class="card grey lighten-3 ">
+				<div class = "row">
+
+					<div class="card-title center-align">
+						<span>{{ ta_info[1][index][1] }}</span>	
+					</div>
+				</div>
+				
+
 			<div class="card-content light-grey-text center-align">
-				<span class="card-title">Comment</span>
 				<p>
 					{{ ta_info[1][index][0]}}
-				</p>
-				<p>
-					{{ ta_info[1][index][1] }}
 				</p>
 			</div>
 			<div class="card-action center-align">

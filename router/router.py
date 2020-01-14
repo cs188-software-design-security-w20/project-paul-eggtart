@@ -27,7 +27,7 @@ def TA(ta_name):
     data = []
     for _, val in ta.val().items():
         if val.get("comment")!= None: #comment
-            data.append( (val["comment"],val["timestamp"] ))
+            data.append( (val["comment"],val["timestamp"].split(" ")[0]))
 
         elif val.get("rating")!= None: # rating
             print(val["rating"])
