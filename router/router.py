@@ -32,14 +32,8 @@ def TA(ta_name):
     for _, val in ta_object.val().items():
         if val.get("comment") != None and val.get("comment_datetime"):
             str_datetime = val["comment_datetime"]
-<<<<<<< HEAD
             str_datetime = datetime.fromisoformat(str_datetime).strftime("%m/%d/%Y, %H:%M:%S")
             comments.append(val["comment"], str_datetime)
-=======
-            str_datetime = datetime.datetime.fromisoformat(str_datetime)
-            str_datetime = str_datetime.strftime("%m/%d/%Y, %H:%M:%S")
-            comment_datetime.append(str_datetime)
->>>>>>> preparing for big error fix merge
         if val.get("rating") != None:
             ratings[0] += 1
             ratings[1][0] += val["rating"]["clarity"]
@@ -51,14 +45,8 @@ def TA(ta_name):
         ratings[1][1] /= ratings[0]
         ratings[1][2] /= ratings[0]
 
-<<<<<<< HEAD
     ta_info.append((ta_name, comments, ratings[1]))
     print(ta_info)
-=======
-    ta_info.append((ta_name, comments, comment_datetime, ratings))
-    # print("TA INFO")
-    # print(ta_info)
->>>>>>> preparing for big error fix merge
 
     # adding comment to forum
     my_comment = forum()
