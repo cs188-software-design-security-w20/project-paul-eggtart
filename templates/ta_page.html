@@ -10,7 +10,7 @@
 {% block content %}
 
 <!-- List TA Information and Header -->
-{% for ta in ta_info %}
+
 <div class="col s12 m8 offset-m2 l6 offset-l3">
 	<div class="card-panel grey lighten-5 z-depth-1">
 		<div class="row valign-wrapper">
@@ -25,7 +25,7 @@
 
 				    </div>
 				    <div class="card-content">
-				      <span class="card-title activator grey-text text-darken-4">{{ta[0]}}<i class="material-icons right">lock_outline</i></span>
+				      <span class="card-title activator grey-text text-darken-4">{{ta_info[0][0]}}<i class="material-icons right">lock_outline</i></span>
 				      <p>Ratings</p>
 				    </div>
 				    <div class="card-reveal">
@@ -46,7 +46,7 @@
 <h1 class="center-align"> Forum </h1>
 
 <!-- List each comment in the Forum -->
-{%for comment in ta[1]%}
+{%for index in range( (ta_info[1] | length) ) %}
 
 <div class="row">
 	<div class="col s12 m6 offset-m3">
@@ -54,7 +54,10 @@
 			<div class="card-content light-grey-text center-align">
 				<span class="card-title">Comment</span>
 				<p>
-					{{ comment }}
+					{{ ta_info[1][index][0]}}
+				</p>
+				<p>
+					{{ ta_info[1][index][1] }}
 				</p>
 			</div>
 			<div class="card-action center-align">
@@ -66,7 +69,8 @@
 </div>
 
 {%endfor%}
-{%endfor%}
+
+
 
 <!-- Submit a comment to the Forum -->
 <form method="POST" action={{redirect}} role="form">

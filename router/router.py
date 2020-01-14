@@ -8,8 +8,9 @@ from flask import (
 from custom_wtforms.forum_forms import comment_form, rating_form
 from search import searchBar
 from load import database
+import datetime
 
-db = database()#define database
+db = database() #define database
 
 
 router = Blueprint(
@@ -23,20 +24,21 @@ router = Blueprint(
 def TA(ta_name):
     ta_info = []
     ta = db.child("TA").child(ta_name).get()
-    comments = []
+    data = []
     for _, val in ta.val().items():
         if val.get("comment")!= None: #comment
-            comments.append(val["comment"])
+            data.append( (val["comment"],val["timestamp"] ))
 
         elif val.get("rating")!= None: # rating
             print(val["rating"])
 
-    ta_info.append((ta_name,comments))
+    ta_info= (ta_name,data) 
 
     # adding comment to forum
     my_comment = comment_form()
     if my_comment.validate_on_submit():
-        db.child("TA").child(ta_name).push({"comment": my_comment.comment.data})
+        db.child("TA").child(ta_name).push({"comment": my_comment.comment.data,
+                                        "timestamp": str(datetime.datetime.now()) })
         return redirect('/TA/'+ta_name)
     
     # addint rating to TA
@@ -47,7 +49,8 @@ def TA(ta_name):
         print(my_rating.availability.data)
         db.child("Ratings").child(ta_name).push({"rating": [my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data]})
 
-    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
+    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, 
+        comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
 
 
 
