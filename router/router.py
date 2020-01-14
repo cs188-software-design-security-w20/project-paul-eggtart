@@ -41,12 +41,12 @@ def TA(ta_name):
             ratings[1][2] += val["rating"]["availability"]
     
     if ratings[0] > 0:
-        ratings[1][0] /= ratings[0]
-        ratings[1][1] /= ratings[0]
-        ratings[1][2] /= ratings[0]
+        ratings[1][0] = str(round(ratings[1][0] / ratings[0], 2))
+        ratings[1][1] = str(round(ratings[1][1] / ratings[0], 2))
+        ratings[1][2] = str(round(ratings[1][2] / ratings[0], 2))
 
     ta_info = (ta_name, comments, ratings[1])
-    print(ta_info)
+    # print(ta_info)
 
     # adding comment to forum
     my_comment = comment_form()

@@ -10,6 +10,6 @@ class comment_form(FlaskForm):
     comment = StringField('comment', [validators.Length(min=1, max=300)])
 
 class rating_form(FlaskForm):
-    clarity = IntegerField('clarity', default=0)
-    helpfulness = IntegerField('helpfulness', default=0)
-    availability = IntegerField('availability', default=0)
+    clarity = IntegerField('clarity', default=3)
+    helpfulness = IntegerField('helpfulness', default=3)
+    availability = IntegerField('availability', default=3)
