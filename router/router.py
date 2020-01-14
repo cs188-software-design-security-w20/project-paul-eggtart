@@ -34,7 +34,7 @@ def TA(ta_name):
             comments.append(val["comment"])
         if val.get("comment_datetime") != None:
             str_datetime = val["comment_datetime"]
-            str_datetime = datetime.fromisoformat(str_datetime)
+            str_datetime = datetime.datetime.fromisoformat(str_datetime)
             str_datetime = str_datetime.strftime("%m/%d/%Y, %H:%M:%S")
             comment_datetime.append(str_datetime)
         if val.get("rating") != None:
@@ -43,12 +43,14 @@ def TA(ta_name):
             ratings[1][1] += val["rating"]["helpfulness"]
             ratings[1][2] += val["rating"]["availability"]
     
-    ratings[1][0] /= ratings[0]
-    ratings[1][1] /= ratings[0]
-    ratings[1][2] /= ratings[0]
+    if ratings[0] > 0:
+        ratings[1][0] /= ratings[0]
+        ratings[1][1] /= ratings[0]
+        ratings[1][2] /= ratings[0]
 
     ta_info.append((ta_name, comments, comment_datetime, ratings))
-    print(ta_info)
+    # print("TA INFO")
+    # print(ta_info)
 
     # adding comment to forum
     my_comment = comment_form()
@@ -60,12 +62,13 @@ def TA(ta_name):
             "comment": my_comment.comment.data,
             "comment_datetime": comment_datetime
         })
+        # print("pushed comment")
         return redirect('/TA/'+ta_name)
     
     # addint rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
-        print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
+        # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
         db.child("TA").child(ta_name).push({
             "rating": {
                 "clarity": my_rating.clarity.data, 
@@ -73,7 +76,7 @@ def TA(ta_name):
                 "availability":my_rating.availability.data
             }
         })
-        print("pushed")
+        # print("pushed rating")
 
     return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
 
