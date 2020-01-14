@@ -32,20 +32,33 @@ def TA(ta_name):
     for _, val in ta_object.val().items():
         if val.get("comment") != None and val.get("comment_datetime"):
             str_datetime = val["comment_datetime"]
+<<<<<<< HEAD
             str_datetime = datetime.fromisoformat(str_datetime).strftime("%m/%d/%Y, %H:%M:%S")
             comments.append(val["comment"], str_datetime)
+=======
+            str_datetime = datetime.datetime.fromisoformat(str_datetime)
+            str_datetime = str_datetime.strftime("%m/%d/%Y, %H:%M:%S")
+            comment_datetime.append(str_datetime)
+>>>>>>> preparing for big error fix merge
         if val.get("rating") != None:
             ratings[0] += 1
             ratings[1][0] += val["rating"]["clarity"]
             ratings[1][1] += val["rating"]["helpfulness"]
             ratings[1][2] += val["rating"]["availability"]
     
-    ratings[1][0] /= ratings[0]
-    ratings[1][1] /= ratings[0]
-    ratings[1][2] /= ratings[0]
+    if ratings[0] > 0:
+        ratings[1][0] /= ratings[0]
+        ratings[1][1] /= ratings[0]
+        ratings[1][2] /= ratings[0]
 
+<<<<<<< HEAD
     ta_info.append((ta_name, comments, ratings[1]))
     print(ta_info)
+=======
+    ta_info.append((ta_name, comments, comment_datetime, ratings))
+    # print("TA INFO")
+    # print(ta_info)
+>>>>>>> preparing for big error fix merge
 
     # adding comment to forum
     my_comment = forum()
@@ -57,6 +70,7 @@ def TA(ta_name):
             "comment": my_comment.comment.data,
             "comment_datetime": comment_datetime
         })
+        # print("pushed comment")
         return redirect('/TA/'+ta_name)
     else:
         print("error, too long")
@@ -64,7 +78,7 @@ def TA(ta_name):
     # addint rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
-        print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
+        # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
         db.child("TA").child(ta_name).push({
             "rating": {
                 "clarity": my_rating.clarity.data, 
@@ -72,7 +86,7 @@ def TA(ta_name):
                 "availability":my_rating.availability.data
             }
         })
-        print("pushed")
+        # print("pushed rating")
 
     return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, 
         comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
