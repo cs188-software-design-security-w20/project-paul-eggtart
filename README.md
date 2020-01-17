@@ -4,6 +4,7 @@
 * [Introduction](#intro)
 * [Getting Started](#getting-started)
 * [Navigating the Site](#navigating-the-site)
+* [Work In Progress / To Do](#work-in-progress/to-do)
 * [Sources](#sources)
 
 ## Introduction
@@ -38,13 +39,11 @@ $ python3 app.py
 - /TA/paul-eggert
 - /search
 
-## Example Search (Exact words case sensitive)
+### Example Search (Exact words case sensitive)
 - tian-ye 
 
-## In Progress
-- Ratings Connect Backend To Frontend
 
-## TO-DO
+## Work In Progress / To Do
 - Payment System
 - Search Page
 - Login 
@@ -57,5 +56,6 @@ $ python3 app.py
 - https://wtforms.readthedocs.io/en/stable/
 - https://pypi.org/project/wtforms-html5/
 
-## Firebase documentation
+
+### Firebase documentation
 - https://github.com/thisbejim/Pyrebase 
