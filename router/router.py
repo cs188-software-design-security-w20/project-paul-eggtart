@@ -12,7 +12,7 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
-from search import searchBar
+from search import searchBar,closest_match
 from load import database
 import datetime
 
@@ -61,7 +61,8 @@ def TA(ta_name):
 def search():
     search = searchBar()
     if search.validate_on_submit():
-        return redirect('/TA/'+search.ta_name.data)
+        correction = closest_match(search.ta_name.data)
+        return redirect('/TA/'+correction)
     return render_template('search.html', form=search)  
 
 
