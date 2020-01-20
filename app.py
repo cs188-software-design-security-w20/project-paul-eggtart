@@ -15,7 +15,7 @@ from flask_wtf.csrf import CSRFProtect
 import load
 
 def create_app(config_file):
-    app = Flask(__name__, static_url_path = "/images", static_folder = "images")
+    app = Flask(__name__)
     csrf = CSRFProtect(app)
     csrf = CSRFProtect()
     app.config['SECRET_KEY'] = os.environ.get("CSRF_KEY_SECRET")
