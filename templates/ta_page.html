@@ -22,8 +22,9 @@
 			<div class="col s10">
 				<div class="card">
 					<div class="card-image waves-effect waves-block waves-light"></div>
+					<!-- FLIP THE REVEAL / DON'T REVEAL CARDS -->
+					<!-- FIGURE OUT HOW TO HIDE BEHIND PAYWALL -->
 					<div class="card-content">
-
 						<span class="card-title activator grey-text text-darken-4">
 							{{ta_info[0]}}
 							<i class="material-icons right">lock_outline</i>
@@ -32,16 +33,22 @@
 						<p>Clarity: {{ta_info[2][0]}}</p>
 						<p>Helpfulness: {{ta_info[2][1]}}</p>
 						<p>Availability: {{ta_info[2][2]}}</p>
-
 					</div>
+
 					<div class="card-reveal">
 						<span class="card-title grey-text text-darken-4">
-							Card Title
+							{{ta_info[0]}}
+							<p>locked...</p>
 							<i class="material-icons right">close</i>
 						</span>
 					</div>
 				</div>
+				<p>
+					<!-- CLASSES THE TA TEACHES !!! -->
+					<!-- {%for index in range( (ta_info[1] | length) ) %}
 
+					{%endfor%} -->
+				</p>
 			</div>
 		</div>
 	</div>
