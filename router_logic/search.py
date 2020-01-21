@@ -15,4 +15,3 @@ def closest_5_match(search):
 
 class searchBar(FlaskForm):
     ta_name = StringField('ta_name', [validators.Length(min=1, max=50)])
-

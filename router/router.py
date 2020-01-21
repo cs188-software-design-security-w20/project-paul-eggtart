@@ -12,7 +12,7 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
-from search import searchBar,closest_match
+from search import searchBar, closest_match
 from load import database
 import datetime
 
