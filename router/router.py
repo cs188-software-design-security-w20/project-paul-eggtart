@@ -62,6 +62,7 @@ def search():
     search = searchBar()
     if search.validate_on_submit():
         correction = closest_match(search.ta_name.data)
+        print(correction)
         return redirect('/TA/'+correction)
     return render_template('search.html', form=search)  
 

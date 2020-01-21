@@ -6,11 +6,11 @@ from fuzzywuzzy import process
 
 
 def closest_match(search):
-	choices = ["paul-eggert","tian-ye"]
+	choices = ["paul-eggert","tian-ye","jeff-bezos","tim-cook"]
 	return process.extract(search, choices, limit=1)[0][0]
 
 def closest_5_match(search):
-	choices = ["paul-eggert","tian-ye"]
+	choices = ["paul-eggert","tian-ye","jeff-bezos","tim-cook"]
 	return [name[0] for name in process.extract(search, choices, limit=5)]
 
 class searchBar(FlaskForm):
