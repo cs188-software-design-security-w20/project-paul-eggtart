@@ -6,6 +6,9 @@
 <!-- Compiled and minified JavaScript -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script src="{{url_for('static', filename='js/script.js')}}"></script>
 </head>
 
 
@@ -28,7 +31,16 @@
 								<form>
 									<div class="row">
 										<div class="input-field col s12">
-											{{ form.ta_name }}
+											  <div class="row">
+											    <div class="col s12">
+											      <div class="row">
+											        <div class="input-field col s12">
+											          <i class="material-icons prefix">textsms</i>
+											          <input type="text" name="ta_name" id="autocomplete-input" class="autocomplete">
+											        </div>
+											      </div>
+											    </div>
+											  </div>
 
 										</div>
 									</div>
@@ -44,6 +56,13 @@
 		</div>
 	</div>
 </form>
+
+
+
+
+
+
+
 
 
 
