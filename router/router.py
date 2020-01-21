@@ -81,3 +81,11 @@ def login():
         "data": username
     }
     return render_template('login.html', **context)
+
+@router.route('/signup', methods=['GET'])
+def signup():
+    username = "Nick"
+    context = {
+        "data": username
+    }
+    return render_template('signup.html', **context)
