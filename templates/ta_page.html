@@ -45,9 +45,10 @@
 				</div>
 				<p>
 					<!-- CLASSES THE TA TEACHES !!! -->
-					<!-- {%for index in range( (ta_info[1] | length) ) %}
-
-					{%endfor%} -->
+					Classes: 
+					{%for index in range( (ta_info[3] | length) ) %}
+						{{ ta_info[3][index] }}.
+					{%endfor%}
 				</p>
 			</div>
 		</div>

@@ -50,10 +50,7 @@ $ python3 app.py
 - Search Page
 - Login 
 - Signup
-- Display Classes (*)
-- ENUM type for available TA's in search (*)
 - search to search_bar (*?)
-- change display to actual name not first-last
 
 
 ## Sources

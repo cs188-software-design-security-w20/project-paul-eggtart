@@ -33,7 +33,11 @@ def TA(ta_name):
     # get the TA information to display
     comments = parse_ta_comments(ta_object)
     ratings = parse_ta_ratings(ta_object)
-    ta_info = (ta_name, comments, ratings)
+    classes = get_ta_classes(ta_object)
+    print(ta_name)
+    display_name = name_to_string(ta_name)
+    print(display_name)
+    ta_info = (display_name, comments, ratings, classes)
 
     # adding comment to forum
     my_comment = comment_form()
