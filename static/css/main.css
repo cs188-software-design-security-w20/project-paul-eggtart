@@ -16,3 +16,26 @@ h1 {
     border: 1px solid #F2F2F2;
 }
 
+.wrapper {
+    width: 100vw;
+    height: 90vh;
+    display: flex;
+}
+
+.center {
+    margin: auto auto;
+    width: 30%;
+    text-align: center;
+}
+
+
+.button {
+    background-color: #4CAF50;  /* GREEN */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
