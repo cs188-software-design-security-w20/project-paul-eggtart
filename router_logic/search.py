@@ -8,7 +8,7 @@ from TA_functions import *
 
 def closest_match(search):
 	choices = get_ta_list()
-	return process.extract(search, choices, limit=1)[0][0]
+	return process.extract(search, choices, limit=1)
 
 def closest_5_match(search):
 	choices = get_ta_list()
