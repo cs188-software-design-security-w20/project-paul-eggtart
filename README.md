@@ -39,8 +39,10 @@ $ python3 app.py
 - /TA/paul-eggert
 - /search
 
-### Example Search (Exact words case sensitive)
-- tian-ye 
+### Example Search (Closest Match)
+- tian-ye becomes tian-ye
+- tian becomes tian-ye
+- paul becomes paul-eggert
 
 
 ## Work In Progress / To Do
@@ -48,6 +50,7 @@ $ python3 app.py
 - Search Page
 - Login 
 - Signup
+- search to search_bar (*?)
 
 
 ## Sources

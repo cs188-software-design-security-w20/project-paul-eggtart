@@ -12,7 +12,7 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
-from search import searchBar,closest_match
+from search import searchBar, closest_match
 from load import database
 import datetime
 
@@ -33,7 +33,11 @@ def TA(ta_name):
     # get the TA information to display
     comments = parse_ta_comments(ta_object)
     ratings = parse_ta_ratings(ta_object)
-    ta_info = (ta_name, comments, ratings)
+    classes = get_ta_classes(ta_object)
+    print(ta_name)
+    display_name = name_to_string(ta_name)
+    print(display_name)
+    ta_info = (display_name, comments, ratings, classes)
 
     # adding comment to forum
     my_comment = comment_form()
@@ -42,7 +46,7 @@ def TA(ta_name):
         return redirect('/TA/'+ta_name)
     else:
         print("comment validate on submit failed...")
-        
+
     # addint rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
@@ -50,9 +54,9 @@ def TA(ta_name):
         return redirect('/TA/'+ta_name)
     else:
         print("rating validate on submit failed...")
-    
+
     # redner the template
-    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, 
+    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
         comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
 
 
@@ -62,9 +66,13 @@ def search():
     search = searchBar()
     if search.validate_on_submit():
         correction = closest_match(search.ta_name.data)
-        print(correction)
-        return redirect('/TA/'+correction)
-    return render_template('search.html', form=search)  
+        name = correction[0][0]
+        score = correction[0][1]
+        if(score < 90):
+            print("not_found")
+            return render_template('search.html', form=search)
+        return redirect('/TA/'+ name)
+    return render_template('search.html', form=search)
 
 
 
@@ -81,3 +89,11 @@ def login():
         "data": username
     }
     return render_template('login.html', **context)
+
+@router.route('/signup', methods=['GET'])
+def signup():
+    username = "Nick"
+    context = {
+        "data": username
+    }
+    return render_template('signup.html', **context)

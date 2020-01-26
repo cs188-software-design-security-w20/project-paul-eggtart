@@ -1,13 +1,25 @@
-<!-- Compiled and minified JavaScript -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<head>
+    <!-- Compiled and minified JavaScript -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
-<!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+</head>
 
 {% extends "navigation-bar.html" %}
 {% block content %}
+
+<div class="wrapper">
+    <div class="center">
+        <a href="/login" class="button">Login</a>
+        <a href="/signup" class="button">Signup</a>
+    </div>
+
+</div>
+
+
+
+
+
 {% endblock %}
-
-
-<h1>This is the Home Page</h1>
