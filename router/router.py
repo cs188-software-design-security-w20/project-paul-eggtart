@@ -12,6 +12,7 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
+from signup_db import *
 from search import searchBar, closest_match
 from load import database
 import datetime
@@ -72,24 +73,28 @@ def search():
 
 
 
-@router.route('/')
+@router.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html')
+    signup_form = signUp()
+    if signup_form.validate_on_submit():
+        create_user(db, signup_form)
+        return redirect('/')
+    return render_template('index.html', form=signup_form)
 
 
 
-@router.route('/login', methods=['GET'])
-def login():
-    username = "Nick"
-    context = {
-        "data": username
-    }
-    return render_template('login.html', **context)
+# @router.route('/login', methods=['GET'])
+# def login():
+#     username = "Nick"
+#     context = {
+#         "data": username
+#     }
+#     return render_template('login.html', **context)
 
-@router.route('/signup', methods=['GET'])
-def signup():
-    username = "Nick"
-    context = {
-        "data": username
-    }
-    return render_template('signup.html', **context)
+# @router.route('/signup', methods=['GET'])
+# def signup():
+#     username = "Nick"
+#     context = {
+#         "data": username
+#     }
+#     return render_template('signup.html', **context)
