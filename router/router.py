@@ -13,6 +13,7 @@ from flask import (
 from forum_forms import comment_form, rating_form
 from TA_functions import *
 from search import searchBar, closest_match
+from profile.profile import User
 from load import database
 import datetime
 
@@ -81,3 +82,36 @@ def login():
         "data": username
     }
     return render_template('login.html', **context)
+
+@router.route('/profile', methods=['GET'])
+def profile():
+    context = {
+        "user": User().get_user(db, 1)
+    }
+    return render_template('profile.html', **context)
+
+@router.route('/profile/edit', methods=['GET'])
+#@login_required
+def profile_edit():
+    id = request.args.get('id', None)
+    parameters = User().get_parameters()
+    context = {
+        "parameters": parameters,
+        "user": User().get_user(db, id)
+    }
+    return render_template('profile_edit.html', **context)
+
+@router.route('/profile/edit', methods=['POST'])
+#@login_required
+def profile_edit_add():
+    status = User().update_user(request.form)
+    if status == "Success":
+        return redirect('/profile')
+    else:
+        id = request.form.get('id', None)
+        context = {
+            "parameters": User().get_parameters(),
+            "user": User().get_user(db, id)
+        }
+        return render_template('profile_edit.html', **context)
+    
