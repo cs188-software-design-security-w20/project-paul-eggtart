@@ -47,7 +47,7 @@ def TA(ta_name):
         return redirect('/TA/'+ta_name)
     else:
         print("comment validate on submit failed...")
-        
+
     # addint rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
@@ -55,9 +55,9 @@ def TA(ta_name):
         return redirect('/TA/'+ta_name)
     else:
         print("rating validate on submit failed...")
-    
+
     # redner the template
-    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name, 
+    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
         comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
 
 
@@ -67,9 +67,13 @@ def search():
     search = searchBar()
     if search.validate_on_submit():
         correction = closest_match(search.ta_name.data)
-        print(correction)
-        return redirect('/TA/'+correction)
-    return render_template('search.html', form=search)  
+        name = correction[0][0]
+        score = correction[0][1]
+        if(score < 90):
+            print("not_found")
+            return render_template('search.html', form=search)
+        return redirect('/TA/'+ name)
+    return render_template('search.html', form=search)
 
 
 
