@@ -11,6 +11,46 @@ import datetime
 
 
 
+######################################################################################
+######################################################################################
+########################### T.A. NAMES, GLOBAL VARIABLES #############################
+######################################################################################
+######################################################################################
+
+
+
+def get_ta_list():
+
+    ta_list = [
+        "paul-eggert",
+        "tian-ye",
+        "jeff-bezos",
+        "tim-cook"
+    ]
+
+    return ta_list
+
+def name_to_string(ta_name):
+
+    dictionary = {
+        "paul-eggert": "Paul R. Eggert",
+        "tian-ye": "Tian Ye",
+        "jeff-bezos": "Jeff Bezos",
+        "tim-cook": "Tim Cook"
+    }
+
+    return dictionary[ta_name]
+
+
+
+######################################################################################
+######################################################################################
+############# T.A. FORUM FORM HANDLING FUNCTIONS (SET/GET DATABSE) ###################
+######################################################################################
+######################################################################################
+
+
+
 def parse_ta_comments(ta_object):
     comments = []
 
@@ -38,8 +78,19 @@ def parse_ta_ratings(ta_object):
         ratings[1][0] = str(round(ratings[1][0] / ratings[0], 2))
         ratings[1][1] = str(round(ratings[1][1] / ratings[0], 2))
         ratings[1][2] = str(round(ratings[1][2] / ratings[0], 2))
+    else:
+        ratings[1] = ['?', '?', '?']
 
     return ratings[1]
+
+def get_ta_classes(ta_object):
+    classes = []
+
+    for _, val in ta_object.val().items():
+        if val.get("class") != None:
+            classes.append(val["class"])
+
+    return classes
 
 
 

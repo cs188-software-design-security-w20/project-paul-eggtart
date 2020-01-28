@@ -1,16 +1,17 @@
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, StringField, validators
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
+from fuzzywuzzy import fuzz, process
+from TA_functions import *
+
 
 
 def closest_match(search):
-	choices = ["paul-eggert","tian-ye","jeff-bezos","tim-cook"]
-	return process.extract(search, choices, limit=1)[0][0]
+	choices = get_ta_list()
+	return process.extract(search, choices, limit=1)
 
 def closest_5_match(search):
-	choices = ["paul-eggert","tian-ye","jeff-bezos","tim-cook"]
+	choices = get_ta_list()
 	return [name[0] for name in process.extract(search, choices, limit=5)]
 
 class searchBar(FlaskForm):
