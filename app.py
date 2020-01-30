@@ -31,7 +31,7 @@ def create_app(config_file):
         static_url_path='/static/css'
     )
     js = Blueprint(
-        'css',
+        'js',
         __name__,
         template_folder='templates',
         static_folder='static/js',
