@@ -1,0 +1,86 @@
+<!-- Compiled and minified JavaScript -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+
+{% extends "navigation-bar.html" %}
+{% block content %}
+
+{% set url = url_for("router.profile_edit") %}
+<form method="POST" id="input" role="form" action="{% block add_link %}{{url_for('router.profile_edit_add')}}{% endblock %}">
+   <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+   <input type="hidden" name="id" value="{{ user.id }}"/>
+    <h1>This is to edit</h1>
+    <div class="col s12 m8 offset-m2 l6 offset-l3">
+        <div class="card-panel grey lighten-5 z-depth-1">
+            <div class="row valign-wrapper">
+                <div class="col s10">
+                    <div class="card">
+                        <table class="table table-responsive">
+                            {% for parameter in parameters %}
+                                {% if parameter.name == "first_name"%}
+                                    <tr>
+                                        <div class="col s5">
+                                            <th>First Name</th>
+                                            <td>
+                                            <input type="text" class="form-control" name="{{parameter.name}}"
+                                                placeholder="{{ user.first_name }}">
+                                            </td>
+                                        </div>
+                                    </tr>
+                                {% endif %}
+                                {% if parameter.name == "last_name" %}
+                                    <tr>
+                                        <div class="col s5">
+                                            <th>Last Name</th>
+                                            <td>
+                                            <input type="text" class="form-control" name="{{parameter.name}}"
+                                                placeholder="{{ user.last_name }}">
+                                            </td>
+                                        </div>
+                                    </tr>
+                                {% endif %}
+                            
+                            
+                                {% if parameter.name == "email" %}
+                                <tr>
+                                <div class="col s5">
+                                    <th>Email</th>
+                                    <td>
+                                    <input type="text" class="form-control" name="{{parameter.name}}"
+                                        placeholder="{{ user.email }}">
+                                    </td>
+                                </div>
+                                </tr>
+                                {% endif %}
+                                {% if parameter.name == "password" %}
+                                <tr>
+                                    <div class="col s5">
+                                        <th>Password</th>
+                                        <td>
+                                        <input type="text" class="form-control" name="{{parameter.name}}"
+                                            placeholder="{{ user.password }}">
+                                        </td>
+                                    </div>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                        <p>Next password reset date: {{ user.password_reset }}</p>
+                        <p>Credits: {{ user.credits }}</p>
+                        <p>Remaining Views: {{ user.remaining_views }}</p>
+                    </div>
+                    <div class="box-footer">
+                        <button type="submit" class="btn btn-info pull-right">submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+{% endblock %}

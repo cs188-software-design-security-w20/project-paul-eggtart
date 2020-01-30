@@ -16,7 +16,8 @@ from wtforms.validators import DataRequired
 from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
 
-class User(FlaskForm):
+class User():
+    id = IntegerField('id')
     email = StringField('email', validators=[DataRequired()])
     first_name = StringField('first_name', validators=[DataRequired()])
     last_name = StringField('last_name', validators=[DataRequired()])
@@ -24,5 +25,66 @@ class User(FlaskForm):
     authenticated = BooleanField('authenticated', default=False)
     password_reset = DateTimeField('password_reset')
     credits = IntegerField('credits', default=0)
-    viewable_ta = FieldList('ta_name', StringField('name'))
+    viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
+
+    def __init__(self):
+        return
+    
+    def model_class(self):
+        return User
+
+    def get_user(self, db, username):
+        user = db.child("users").child(username).get()
+        for key, val in user.val().items():
+            setattr(self, key, val)
+        return self
+    
+    def update_user(self, form, **kwargs):
+        cls = self.model_class()
+        print("Updating...")
+        names = self.get_properties()
+        attributes = self.validate_data(names, form)
+        print("attributes")
+        print(attributes)
+       # db.child("users").child(attributes)
+
+
+    def get_parameters(self):
+        cls = self.model_class()
+        parameters = []
+
+        for name in cls.__dict__.keys():
+            if hasattr(User, name) and not name.startswith('_'):
+                parameters.append({
+                    "name": name
+                })
+        return parameters
+
+    #returns array of properties
+    def get_properties(self):
+        cls = self.model_class()
+        names = []
+        for name in dir(cls):
+            attribute = getattr(cls, name)
+            if isinstance(attribute, User):
+                names.append(name)
+        return names
+
+    def validate_data(self, names, params):
+        attributes = {}
+        for name in names:
+            param = params.get(name)
+            if hasattr(User, name):
+                value = value.encode('utf-8')
+                value = attribute.validate(value)
+                attributes[name] = value
+            except ValueError:
+                return None
+        return attributes
+
+
+
+
+
+

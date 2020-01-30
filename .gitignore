@@ -1,2 +1,5 @@
 /env
 .vscode
+/router_logic/__pycache__
+/router/__pycache__
+/profile/__pycache__
