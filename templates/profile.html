@@ -10,7 +10,7 @@
 {% block content %}
 
 {% set url = url_for("router.profile") %}
-<div class="col s12 m8 offset-m2 l6 offset-l3">
+<div class="col s12 m8 l6">
 	<div class="card-panel grey lighten-5 z-depth-1">
 		<div class="row valign-wrapper">
 			<div class="col s10">
@@ -21,6 +21,8 @@
                                 <th>First Name</th>
                                 <td>{{ user.first_name }}</td>
                             </div>
+                        </tr>
+                        <tr>
                             <div class="col s5">
                                 <th>Last Name</th>
                                 <td>{{ user.last_name }}</td>
@@ -31,20 +33,38 @@
                                 <th>Email</th>
                                 <td>{{ user.email }}</td>
                             </div>
+                        </tr>
+                        <tr>
                             <div class="col s5">
                                 <th>Password</th>
                                 <td>{{ user.password }}</td>
                             </div>
                         </tr>
-                        
+                        <tr>
+                            <div class="col s5">
+                                <th>Next Password Reset Date</th>
+                                <td>{{ user.password_reset }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Remaining Views</th>
+                                <td>{{ user.remaining_views }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Credits</th>
+                                <td>{{ user.credits }}</td>
+                            </div>
+                        </tr>
                     </table>
-                    <p>Next password reset date: {{ user.password_reset }}</p>
-                    <p>Credits: {{ user.credits }}</p>
-                    <p>Remaining Views: {{ user.remaining_views }}</p>
 				</div>
-                <a href="{{ url }}/edit?id={{ user.id }}">
-                    {{ user.id }}
-                </a>
+                <div class="box-footer">
+                    <a href="{{ url }}/edit?id={{ user.id }}">
+                        <button class="btn btn-info pull-right">edit</button>
+                    </a>
+                </div>
 			</div>
 		</div>
 	</div>

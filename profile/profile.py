@@ -16,6 +16,8 @@ from wtforms.validators import DataRequired
 from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
 
+db = database()
+
 class User():
     id = IntegerField('id')
     email = StringField('email', validators=[DataRequired()])
@@ -42,20 +44,19 @@ class User():
     
     def update_user(self, form, **kwargs):
         cls = self.model_class()
-        print("Updating...")
         names = self.get_properties()
         attributes = self.validate_data(names, form)
-        print("attributes")
-        print(attributes)
-       # db.child("users").child(attributes)
-
+        for key, val in list(attributes.items()):
+            if val == '':
+                del attributes[key]
+        db.child("users").child(id).update(attributes)
+        return "Success"
 
     def get_parameters(self):
         cls = self.model_class()
         parameters = []
-
         for name in cls.__dict__.keys():
-            if hasattr(User, name) and not name.startswith('_'):
+            if hasattr(User, name) and not name.startswith('_') and not callable(getattr(User, name)):
                 parameters.append({
                     "name": name
                 })
@@ -65,9 +66,8 @@ class User():
     def get_properties(self):
         cls = self.model_class()
         names = []
-        for name in dir(cls):
-            attribute = getattr(cls, name)
-            if isinstance(attribute, User):
+        for name in cls.__dict__.keys():
+            if hasattr(User, name) and not name.startswith('_') and not callable(getattr(User, name)):
                 names.append(name)
         return names
 
@@ -75,12 +75,9 @@ class User():
         attributes = {}
         for name in names:
             param = params.get(name)
-            if hasattr(User, name):
-                value = value.encode('utf-8')
-                value = attribute.validate(value)
-                attributes[name] = value
-            except ValueError:
-                return None
+            if param is not None:
+                if hasattr(User, name):
+                    attributes[name] = param
         return attributes
 
 
