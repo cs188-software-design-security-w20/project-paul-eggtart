@@ -49,6 +49,7 @@ class User():
         for key, val in list(attributes.items()):
             if val == '':
                 del attributes[key]
+        id = attributes["id"]
         db.child("users").child(id).update(attributes)
         return "Success"
 
