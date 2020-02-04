@@ -26,39 +26,39 @@
         <div id="signup">   
           <h1>Sign Up for Free</h1>
           
-          <form action="/" method="post">
+          <form action="/" method="POST" role="form">
+          {{ form.csrf_token }}
+            <div class="top-row">
+              <div class="field-wrap">
+                <label>
+                  First Name<span class="req">*</span>
+                </label>
+                <input type="text" required autocomplete="off" name="first_name"/>
+              </div>
           
-          <div class="top-row">
-            <div class="field-wrap">
-              <label>
-                First Name<span class="req">*</span>
-              </label>
-              <input type="text" required autocomplete="off" />
+              <div class="field-wrap">
+                <label>
+                  Last Name<span class="req">*</span>
+                </label>
+                <input type="text"required autocomplete="off" name="last_name"/>
+              </div>
             </div>
-        
-            <div class="field-wrap">
-              <label>
-                Last Name<span class="req">*</span>
-              </label>
-              <input type="text"required autocomplete="off"/>
-            </div>
-          </div>
 
-          <div class="field-wrap">
-            <label>
-              Email Address<span class="req">*</span>
-            </label>
-            <input type="email"required autocomplete="off"/>
-          </div>
-          
-          <div class="field-wrap">
-            <label>
-              Set A Password<span class="req">*</span>
-            </label>
-            <input type="password"required autocomplete="off"/>
-          </div>
-          
-          <button type="submit" class="button button-block"/>Get Started</button>
+            <div class="field-wrap">
+              <label>
+                Email Address<span class="req">*</span>
+              </label>
+              <input type="email"required autocomplete="off" name="email_addr"/>
+            </div>
+            
+            <div class="field-wrap">
+              <label>
+                Set A Password<span class="req">*</span>
+              </label>
+              <input type="password"required autocomplete="off" name="password"/>
+            </div>
+            
+            <button type="submit" class="button button-block" name="action"/>Get Started</button>
           
           </form>
 
