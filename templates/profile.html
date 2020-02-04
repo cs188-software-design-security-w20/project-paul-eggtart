@@ -1,0 +1,74 @@
+<!-- Compiled and minified JavaScript -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+
+{% extends "navigation-bar.html" %}
+{% block content %}
+
+{% set url = url_for("router.profile") %}
+<div class="col s12 m8 l6">
+	<div class="card-panel grey lighten-5 z-depth-1">
+		<div class="row valign-wrapper">
+			<div class="col s10">
+				<div class="card">
+                    <table class="table table-responsive">
+                        <tr>
+                            <div class="col s5">
+                                <th>First Name</th>
+                                <td>{{ user.first_name }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Last Name</th>
+                                <td>{{ user.last_name }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Email</th>
+                                <td>{{ user.email }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Password</th>
+                                <td>{{ user.password }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Next Password Reset Date</th>
+                                <td>{{ user.password_reset }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Remaining Views</th>
+                                <td>{{ user.remaining_views }}</td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Credits</th>
+                                <td>{{ user.credits }}</td>
+                            </div>
+                        </tr>
+                    </table>
+				</div>
+                <div class="box-footer">
+                    <a href="{{ url }}/edit?id={{ user.id }}">
+                        <button class="btn btn-info pull-right">edit</button>
+                    </a>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
