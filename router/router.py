@@ -14,7 +14,7 @@ from forum_forms import comment_form, rating_form
 from TA_functions import *
 from signup_db import *
 from search import searchBar, closest_match
-from profile.profile import User
+from profile.profile import User, LoginForm, RegisterForm
 from load import database
 import datetime
 
@@ -80,6 +80,7 @@ def search():
 
 @router.route('/', methods=['GET', 'POST'])
 def home():
+<<<<<<< HEAD
     signup_form = signUp()
     if signup_form.validate_on_submit():
         create_user(db, signup_form)
@@ -105,6 +106,24 @@ def home():
 #     return render_template('signup.html', **context)
     return render_template('index.html')
 
+=======
+    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+
+@router.route('/', methods=['POST'])
+def login():
+    login_form = LoginForm(request.form)
+    if request.method == 'POST' and login_form.validate():
+        user = User()
+        user.email = login_form.email.data
+        user.password = login_form.password.data
+        if user.login(user) == "Success":
+            return redirect(url_for('router.search'))
+    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+
+@router.route('/register', methods=['POST'])
+def register():
+    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+>>>>>>> b479a7d8d5b2b01763a149fa256995ca409c98c1
 
 @router.route('/profile', methods=['GET'])
 def profile():

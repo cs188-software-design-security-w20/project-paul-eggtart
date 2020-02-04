@@ -8,13 +8,25 @@ from flask import (
 from load import database
 import datetime
 from flask_wtf import FlaskForm
+from wtforms import Form
 from wtforms import StringField
 from wtforms import BooleanField
 from wtforms import DateTimeField
 from wtforms import FieldList
+from wtforms import SubmitField
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
+import json
+
+db = database()
+
+class LoginForm(Form):
+    email = StringField('email', validators=[DataRequired()])
+    password = StringField('password', validators=[DataRequired()]) 
+
+class RegisterForm(Form):
+    email = StringField('email', validators=[DataRequired()])
 
 class User():
     id = IntegerField('id')
@@ -34,6 +46,14 @@ class User():
     def model_class(self):
         return User
 
+    def login(self, user):
+        users = db.child("users").get().val()
+        for u in users:
+            data = users[u]
+            if data['email'] == user.email and data["password"] == user.password:
+                return "Success"
+        return "Failure"
+
     def get_user(self, db, username):
         user = db.child("users").child(username).get()
         for key, val in user.val().items():
@@ -42,20 +62,20 @@ class User():
     
     def update_user(self, form, **kwargs):
         cls = self.model_class()
-        print("Updating...")
         names = self.get_properties()
         attributes = self.validate_data(names, form)
-        print("attributes")
-        print(attributes)
-       # db.child("users").child(attributes)
-
+        for key, val in list(attributes.items()):
+            if val == '':
+                del attributes[key]
+        id = attributes["id"]
+        db.child("users").child(id).update(attributes)
+        return "Success"
 
     def get_parameters(self):
         cls = self.model_class()
         parameters = []
-
         for name in cls.__dict__.keys():
-            if hasattr(User, name) and not name.startswith('_'):
+            if hasattr(User, name) and not name.startswith('_') and not callable(getattr(User, name)):
                 parameters.append({
                     "name": name
                 })
@@ -65,9 +85,8 @@ class User():
     def get_properties(self):
         cls = self.model_class()
         names = []
-        for name in dir(cls):
-            attribute = getattr(cls, name)
-            if isinstance(attribute, User):
+        for name in cls.__dict__.keys():
+            if hasattr(User, name) and not name.startswith('_') and not callable(getattr(User, name)):
                 names.append(name)
         return names
 
@@ -75,12 +94,9 @@ class User():
         attributes = {}
         for name in names:
             param = params.get(name)
-            if hasattr(User, name):
-                value = value.encode('utf-8')
-                value = attribute.validate(value)
-                attributes[name] = value
-            except ValueError:
-                return None
+            if param is not None:
+                if hasattr(User, name):
+                    attributes[name] = param
         return attributes
 
 
