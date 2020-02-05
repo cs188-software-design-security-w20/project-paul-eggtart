@@ -21,13 +21,6 @@ import json
 
 db = database()
 
-class LoginForm(Form):
-    email = StringField('email', validators=[DataRequired()])
-    password = StringField('password', validators=[DataRequired()]) 
-
-class RegisterForm(Form):
-    email = StringField('email', validators=[DataRequired()])
-
 class User():
     id = IntegerField('id')
     email = StringField('email', validators=[DataRequired()])
@@ -46,13 +39,6 @@ class User():
     def model_class(self):
         return User
 
-    def login(self, user):
-        users = db.child("users").get().val()
-        for u in users:
-            data = users[u]
-            if data['email'] == user.email and data["password"] == user.password:
-                return "Success"
-        return "Failure"
 
     def get_user(self, db, username):
         user = db.child("users").child(username).get()
@@ -99,8 +85,5 @@ class User():
                     attributes[name] = param
         return attributes
 
-
-
-
-
-
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__)

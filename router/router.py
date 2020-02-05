@@ -12,9 +12,10 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
-from signup_db import *
+from signup_db import SignUpForm
+from login_db import LoginForm
 from search import searchBar, closest_match
-from profile.profile import User, LoginForm, RegisterForm
+from profile.profile import User
 from load import database
 import datetime
 
@@ -80,50 +81,26 @@ def search():
 
 @router.route('/', methods=['GET', 'POST'])
 def home():
-<<<<<<< HEAD
-    signup_form = signUp()
-    if signup_form.validate_on_submit():
-        create_user(db, signup_form)
-        return redirect('/')
-    return render_template('index.html', form=signup_form)
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
-
-
-# @router.route('/login', methods=['GET'])
-# def login():
-#     username = "Nick"
-#     context = {
-#         "data": username
-#     }
-#     return render_template('login.html', **context)
-
-# @router.route('/signup', methods=['GET'])
-# def signup():
-#     username = "Nick"
-#     context = {
-#         "data": username
-#     }
-#     return render_template('signup.html', **context)
-    return render_template('index.html')
-
-=======
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
-
-@router.route('/', methods=['POST'])
+@router.route('/login', methods=['POST'])
 def login():
     login_form = LoginForm(request.form)
     if request.method == 'POST' and login_form.validate():
         user = User()
         user.email = login_form.email.data
         user.password = login_form.password.data
-        if user.login(user) == "Success":
+        if login_form.login(user) == "Success":
             return redirect(url_for('router.search'))
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
-@router.route('/register', methods=['POST'])
-def register():
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
->>>>>>> b479a7d8d5b2b01763a149fa256995ca409c98c1
+@router.route('/signup', methods=['POST'])
+def signup():
+    signup_form = SignUpForm()
+    if signup_form.validate_on_submit():
+        signup_form.create_user(db, signup_form)
+        return redirect('/')
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
 def profile():
