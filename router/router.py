@@ -14,8 +14,10 @@ from flask import (
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
+from signup_db import SignUpForm
+from login_db import LoginForm
 from search import searchBar, closest_match
-from profile.profile import User, LoginForm, RegisterForm
+from profile.profile import User
 from load import database
 import datetime
 from flask_login import login_user, login_required, login_manager, current_user
@@ -91,24 +93,38 @@ def search():
 
 
 
-@router.route('/')
+@router.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
-@router.route('/', methods=['POST'])
+@router.route('/login', methods=['POST'])
 def login():
     login_form = LoginForm(request.form)
     if request.method == 'POST' and login_form.validate():
         user = User(0)
         user.email = login_form.email.data
         user.password = login_form.password.data
-        if user.login(user) == "Success":
+        if login_form.login(user) == "Success":
+            print("Should've logged me in")
+            if login_user(user) == True:
+                print("Successful login")
+            else:
+                print("unsuccessful")
+            #next = request.args.get('next')
+            # if not is_safe_url(next):
+            #     return flask.abort(400)
             return redirect(url_for('router.search'))
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
-@router.route('/', methods=['POST'])
-def register():
-    return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
+@router.route('/signup', methods=['POST'])
+def signup():
+    signup_form = SignUpForm()
+    if signup_form.validate_on_submit():
+        signup_form.create_user(db, signup_form)
+        return redirect('/')
+    else:
+        print("Form invalid")
+    return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
 def profile():
@@ -141,11 +157,3 @@ def profile_edit_add():
             "user": User.get_user(db, id)
         }
         return render_template('profile_edit.html', **context)
-    
-@router.route('/signup', methods=['GET'])
-def signup():
-    username = "Nick"
-    context = {
-        "data": username
-    }
-    return render_template('signup.html', **context)
