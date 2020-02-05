@@ -73,17 +73,17 @@ def search():
         correction = closest_match(search.ta_name.data)
         name = correction[0][0]
         score = correction[0][1]
-        if(score < 90):
+        #remove a view from the user
+        current_session_user = db.child("users").child(current_user.id).get().val()
+        num_views = current_session_user['remaining_views']
+
+        if(num_views <= 0 ): #no more views left
+            return render_template('purchase.html')
+
+        if(score < 90): # score is less than 90, so don't redirect, and don't waste a view
             print("not_found")
             return render_template('search.html', form=search)
         else:
-            #remove a view from the user
-            current_session_user = db.child("users").child(current_user.id).get().val()
-            num_views = current_session_user['remaining_views']
-
-            if(num_views <= 0 ): #no more views left
-                return render_template('purchase.html')
-
             current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
             db.child("users").child(current_user.id).update(current_session_user) # update db
             return redirect('/TA/'+ name)
