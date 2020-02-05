@@ -41,30 +41,26 @@ def create_app(config_file):
         static_url_path='/static/js'
     )
     app.register_blueprint(js)
+
     return app
 
 app = create_app('config')
+
 db = load.database()
 limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute", "10 per second"])
 
+db.child("users").child(2).set({"email": "jane@gmail.com","password":"temp"})
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(1)
 
 @app.route('/')
 def index():
     return redirect(url_for('router.home'))
 
-@login_manager.user_loader
-def load_user(user_id):
-    print(str(user_id))
-    users = db.child("users").get().val()
-    print(users)
-    for u in users:
-        if u is None:
-            continue
-        data = u
-        print(data)
-        if user_id == data['id']:
-            return User(user_id)
-    return None
+
 
 if __name__ == '__main__':
     app.run()

@@ -19,9 +19,12 @@ from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
 from flask_login import UserMixin
 
+
+
 import json
 
 db = database()
+
 
 class LoginForm(Form):
     email = StringField('email', validators=[DataRequired()])
@@ -30,7 +33,7 @@ class LoginForm(Form):
 class RegisterForm(Form):
     email = StringField('email', validators=[DataRequired()])
 
-class User():
+class User(UserMixin):
     id = IntegerField('id')
     email = StringField('email', validators=[DataRequired()])
     first_name = StringField('first_name', validators=[DataRequired()])
@@ -127,6 +130,8 @@ class User():
                 if hasattr(User, name):
                     attributes[name] = param
         return attributes
+
+
 
 
 
