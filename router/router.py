@@ -8,7 +8,9 @@ from flask import (
     request,
     redirect,
     url_for,
-    render_template
+    render_template,
+    Flask,
+    escape
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
@@ -18,6 +20,8 @@ from search import searchBar, closest_match
 from profile.profile import User
 from load import database
 import datetime
+from flask_login import login_user, login_required, login_manager
+
 
 # define the database
 db = database()
@@ -27,7 +31,6 @@ router = Blueprint(
     __name__,
     template_folder='../templates'
 )
-
 
 @router.route('/TA/<ta_name>', methods=['GET', 'POST'])
 def TA(ta_name):
@@ -65,6 +68,7 @@ def TA(ta_name):
 
 
 @router.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     search = searchBar()
     if search.validate_on_submit():
@@ -87,10 +91,18 @@ def home():
 def login():
     login_form = LoginForm(request.form)
     if request.method == 'POST' and login_form.validate():
-        user = User()
+        user = User(0)
         user.email = login_form.email.data
         user.password = login_form.password.data
         if login_form.login(user) == "Success":
+            print("Should've logged me in")
+            if login_user(user) == True:
+                print("Successful login")
+            else:
+                print("unsuccessful")
+            #next = request.args.get('next')
+            # if not is_safe_url(next):
+            #     return flask.abort(400)
             return redirect(url_for('router.search'))
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
@@ -100,12 +112,14 @@ def signup():
     if signup_form.validate_on_submit():
         signup_form.create_user(db, signup_form)
         return redirect('/')
+    else:
+        print("Form invalid")
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
 def profile():
     context = {
-        "user": User().get_user(db, 1)
+        "user": User.get_user(db, 1)
     }
     return render_template('profile.html', **context)
 
@@ -113,23 +127,23 @@ def profile():
 #@login_required
 def profile_edit():
     id = request.args.get('id', None)
-    parameters = User().get_parameters()
+    parameters = User.get_parameters()
     context = {
         "parameters": parameters,
-        "user": User().get_user(db, id)
+        "user": User.get_user(db, id)
     }
     return render_template('profile_edit.html', **context)
 
 @router.route('/profile/edit', methods=['POST'])
 #@login_required
 def profile_edit_add():
-    status = User().update_user(request.form)
+    status = User.update_user(request.form)
     if status == "Success":
         return redirect('/profile')
     else:
         id = request.form.get('id', None)
         context = {
-            "parameters": User().get_parameters(),
-            "user": User().get_user(db, id)
+            "parameters": User.get_parameters(),
+            "user": User.get_user(db, id)
         }
         return render_template('profile_edit.html', **context)

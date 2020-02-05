@@ -17,11 +17,15 @@ from wtforms import SubmitField
 from wtforms.validators import DataRequired
 from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
+from flask_login import UserMixin
+
+
+
 import json
 
 db = database()
 
-class User():
+class User(UserMixin):
     id = IntegerField('id')
     email = StringField('email', validators=[DataRequired()])
     first_name = StringField('first_name', validators=[DataRequired()])
@@ -33,9 +37,34 @@ class User():
     viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
 
-    def __init__(self):
+    @property
+    def is_authenticated(self):
+        return True
+    
+    @property
+    def is_active(self):
+        return True
+    
+    @property
+    def is_anonymous(self):
+        return False
+
+    def __init__(self, uid):
+        self.id = uid
         return
     
+    def get_id(self):
+        try:
+            return str(id)
+        except AttributeError:
+            raise NotImplementedError("No id found")
+
+    def get(self, id):
+        try:
+            return User
+        except:
+            return None
+
     def model_class(self):
         return User
 
