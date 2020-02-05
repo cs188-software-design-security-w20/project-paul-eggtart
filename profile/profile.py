@@ -55,7 +55,11 @@ class User(UserMixin):
     
     def get_id(self):
         try:
-            return str(id)
+            user_list = db.child("users").get()
+            for i in user_list.each():
+                if(i.val() is not None):
+                    if self.email == (i.val()["email"]): #return the id associated with this email
+                        return i.val()["id"]
         except AttributeError:
             raise NotImplementedError("No id found")
 

@@ -20,7 +20,7 @@ from search import searchBar, closest_match
 from profile.profile import User
 from load import database
 import datetime
-from flask_login import login_user, login_required, login_manager
+from flask_login import login_user, login_required, login_manager, current_user
 
 
 # define the database
@@ -78,7 +78,17 @@ def search():
         if(score < 90):
             print("not_found")
             return render_template('search.html', form=search)
-        return redirect('/TA/'+ name)
+        else:
+            #remove a view from the user
+            current_session_user = db.child("users").child(current_user.id).get().val()
+            num_views = current_session_user['remaining_views']
+
+            if(num_views <= 0 ): #no more views left
+                return render_template('purchase.html')
+
+            current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
+            db.child("users").child(current_user.id).update(current_session_user) # update db
+            return redirect('/TA/'+ name)
     return render_template('search.html', form=search)
 
 
