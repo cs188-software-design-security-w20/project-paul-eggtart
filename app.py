@@ -49,12 +49,14 @@ app = create_app('config')
 db = load.database()
 limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute", "10 per second"])
 
-db.child("users").child(2).set({"email": "jane@gmail.com","password":"temp"})
-
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(1)
+    user_data = db.child("users").child(user_id).get()
+    user = User(0)
+    user.id = user_data.val()["id"]
+    user.email = user_data.val()["email"]
+    return user
 
 @app.route('/')
 def index():

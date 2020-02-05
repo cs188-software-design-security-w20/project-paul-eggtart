@@ -18,7 +18,7 @@ from search import searchBar, closest_match
 from profile.profile import User, LoginForm, RegisterForm
 from load import database
 import datetime
-from flask_login import login_user, login_required, login_manager
+from flask_login import login_user, login_required, login_manager, current_user
 
 
 # define the database
@@ -76,7 +76,17 @@ def search():
         if(score < 90):
             print("not_found")
             return render_template('search.html', form=search)
-        return redirect('/TA/'+ name)
+        else:
+            #remove a view from the user
+            current_session_user = db.child("users").child(current_user.id).get().val()
+            num_views = current_session_user['remaining_views']
+
+            if(num_views <= 0 ): #no more views left
+                return render_template('purchase.html')
+
+            current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
+            db.child("users").child(current_user.id).update(current_session_user) # update db
+            return redirect('/TA/'+ name)
     return render_template('search.html', form=search)
 
 
@@ -93,14 +103,6 @@ def login():
         user.email = login_form.email.data
         user.password = login_form.password.data
         if user.login(user) == "Success":
-            print("Should've logged me in")
-            if login_user(user) == True:
-                print("Successful login")
-            else:
-                print("unsuccessful")
-            #next = request.args.get('next')
-            # if not is_safe_url(next):
-            #     return flask.abort(400)
             return redirect(url_for('router.search'))
     return render_template('index.html', login_form=LoginForm(), register_form=RegisterForm())
 
