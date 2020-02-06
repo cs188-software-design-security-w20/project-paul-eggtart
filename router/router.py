@@ -8,10 +8,16 @@ from flask import (
     request,
     redirect,
     url_for,
-    render_template
+    render_template,
+    Flask,
+    escape,
+    flash
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
+from signup_db import SignUpForm
+from login_db import LoginForm
+from email_db import EmailForm
 from search import searchBar, closest_match
 from profile.profile import User
 from load import database
@@ -122,11 +128,27 @@ def profile_edit_add():
             "user": User().get_user(db, id)
         }
         return render_template('profile_edit.html', **context)
-    
-@router.route('/signup', methods=['GET'])
-def signup():
-    username = "Nick"
-    context = {
-        "data": username
-    }
-    return render_template('signup.html', **context)
+
+@router.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = EmailForm()
+    if form.validate_on_submit():
+        found = False
+        users = db.child("users").get().val()
+        print(users)
+        for u in users:
+            data = users[u]
+            if data['email'] == form.email.data:
+                found = True
+                if data['authenticated'] is True:
+                    send_password_reset_email(form.email.data)
+                    flash('Please check your email for a password reset link.', 'success')
+                else:
+                    flash('Your email address must be confirmed before attempting a password reset.', 'error')
+                    return redirect(url_for('users.login'))
+                break
+        if found is False:
+            flash('Invalid email address!', 'error')
+            return render_template('password_reset_email.html', form=form)
+    return render_template('password_reset_email.html', form=form)
+
