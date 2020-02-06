@@ -40,6 +40,8 @@ Creating a new user will give the account 3 'remaining views' which are TA's whi
 A 'remaining view' is used up when you search a TA from the search bar.
 Once that TA has been associated with the account, the TA will always be viewable for the student.
 Once the three 'remaining view's are used up, the student will have to pay to get more views (not yet implemented)
+
+Users are allowed to rate each of their viewable TAs one time, but comment as many times as they want
 - /search
 - /TA/paul-eggert
 

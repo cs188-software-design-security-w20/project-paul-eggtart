@@ -55,17 +55,16 @@ def TA(ta_name):
     # adding rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
-        submit_rating(db, ta_name, my_rating)
+        if can_rate(db, current_user.id, ta_name):
+            submit_rating(db, ta_name, my_rating)
         return redirect('/TA/'+ta_name)
     else:
         print("rating validate on submit failed...")
 
     # render the template
-    ta_viewable_list = db.child("users").child(current_user.id).child('viewable_ta').get()
-    for _, val in ta_viewable_list.val().items():
-        if val[0] == ta_name:
-            return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
-                comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
+    if ta_match(db, current_user.id, ta_name):
+        return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
+            comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
     return render_template('search.html', form=search)
 
 

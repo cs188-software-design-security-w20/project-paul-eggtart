@@ -82,7 +82,7 @@ class User(UserMixin):
 
         ta_list = []
         for ta in self.viewable_ta:
-            ta_list.append(str(data["viewable_ta"][ta][0]))
+            ta_list.append(str(data["viewable_ta"][ta]['name']))
 
         return self, ta_list
     
@@ -135,20 +135,20 @@ class User(UserMixin):
         else:
             return None
 
-    def decrement_views(self,name_of_ta):
+    def decrement_views(self, name_of_ta):
         # Otherwise, decrement views by 1, update DB
         id_user = current_user.id
         current_session_user = db.child("users").child(id_user).get().val()
         ta_viewable_list = db.child("users").child(id_user).child('viewable_ta').get()
         for _, val in ta_viewable_list.val().items():
-            if val[0] == name_of_ta:
+            if val['name'] == name_of_ta:
             # If the TA is one of their viewable TAs, don't decrement views
-                return 
+                return
         current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
         db.child("users").child(id_user).update(current_session_user) # update db with new number of views
                 
         ta_viewable_list2 = db.child("users").child(current_user.id).child('viewable_ta')
-        ta_viewable_list2.push({0: name_of_ta}) # update ta's that this person has seen
+        ta_viewable_list2.push({'name': name_of_ta, 'rated': False}) # update ta's that this person has seen
         return 
 
 

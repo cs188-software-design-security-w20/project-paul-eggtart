@@ -98,7 +98,7 @@ def submit_comment(db, ta_name, my_comment):
     comment_datetime = datetime.datetime.now().isoformat()
     # print(my_comment.comment.data)
     # print(comment_datetime)
-    db.child("TA").child(ta_name).push({
+    db.child('TA').child(ta_name).push({
         "comment": my_comment.comment.data,
         "comment_datetime": comment_datetime
     })
@@ -108,7 +108,7 @@ def submit_comment(db, ta_name, my_comment):
 
 def submit_rating(db, ta_name, my_rating):
     # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
-    db.child("TA").child(ta_name).push({
+    db.child('TA').child(ta_name).push({
         "rating": {
             "clarity": my_rating.clarity.data, 
             "helpfulness": my_rating.helpfulness.data, 
@@ -116,3 +116,19 @@ def submit_rating(db, ta_name, my_rating):
         }
     })
     # print("pushed rating")
+
+def ta_match(db, cur_user_id, ta_name):
+    ta_viewable_list = db.child('users').child(cur_user_id).child('viewable_ta').get()
+    for _, val in ta_viewable_list.val().items():
+        if val['name'] == ta_name:
+            return True
+    return False
+
+def can_rate(db, cur_user_id, ta_name):
+    ta_viewable_list = db.child('users').child(cur_user_id).child('viewable_ta').get().val()
+    for key, val in ta_viewable_list.items():
+        if val['name'] == ta_name and not val['rated']:
+            val['rated'] = True
+            db.child('users').child(cur_user_id).child('viewable_ta').update(ta_viewable_list)
+            return True
+    return False
