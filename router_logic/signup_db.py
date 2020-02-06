@@ -33,5 +33,5 @@ class SignUpForm(FlaskForm):
         new_user.credits = 0
         new_user.viewable_ta = []
         new_user.remaining_views = 3
-        db.child("test_users").child(new_user.id).set(json.loads(new_user.toJSON()))
+        db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
 
