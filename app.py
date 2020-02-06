@@ -49,21 +49,6 @@ app = create_app('config')
 db = load.database()
 limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute", "10 per second"])
 
-def send_password_reset_email(user_email):
-    print("Sending reset")
-    password_reset_serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-
-    password_reset_url = url_for(
-        'users.reset_with_token',
-        token = password_reset_serializer.dumps(user_email, salt='password-reset-salt'),
-        _external=True)
-
-    html = render_template(
-        'email_password_reset.html',
-        password_reset_url=password_reset_url)
-
-    send_email('Password Reset Requested', [user_email], html)
-
 @login_manager.user_loader
 def load_user(user_id):
     user_data = db.child("users").child(user_id).get()
