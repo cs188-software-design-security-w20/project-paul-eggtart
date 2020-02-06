@@ -56,7 +56,7 @@ def load_user(user_id):
     user_data = db.child("users").child(user_id).get()
     if user_data.val() is None:
         return None
-    user = User(0)
+    user = User()
     user.id = user_data.val()["id"]
     user.email = user_data.val()["email"]
     return user

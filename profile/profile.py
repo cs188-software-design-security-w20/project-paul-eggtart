@@ -49,8 +49,7 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
-    def __init__(self, uid):
-        self.id = uid
+    def __init__(self):
         return
     
     def get_id(self):
