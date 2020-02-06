@@ -50,6 +50,8 @@ $ python3 app.py
 - Encrypt End to End (Database)
 - Discuss and implement how to view each TA/comment and locking Ta's content
 - Clean Up Frontend for everything to make it match (Login/ Signup), Purchase.html, Search Page
+- add validators to verify @ucla.edu? 
+
 
 
 

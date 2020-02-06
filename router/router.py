@@ -94,10 +94,8 @@ def search():
                 print("not_found")
                 return render_template('search.html', form=search)
             else:
-                #if(db.child("users").child(1).child('viewable_ta').get().val() = "")
-                current_session_user = db.child("users").child(current_user.id).child('viewable_ta').get()
 
-                for _,val in current_session_user.val().items():
+                for _,val in current_session_user.items():
                     if val == name:
                         return redirect('/TA/'+ name) # don't decrement remaining views
 
