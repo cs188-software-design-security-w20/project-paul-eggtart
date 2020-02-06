@@ -21,7 +21,7 @@ $(function () {
           if( $this.val() === '' ) {
               label.removeClass('active highlight'); 
               } else {
-              label.removeClars('highlight');   
+              label.removeClass('highlight');   
               }   
       } else if (e.type === 'focus') {
         

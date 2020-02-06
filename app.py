@@ -75,6 +75,17 @@ def load_user(user_id):
     return user
 
 
+
+@login_manager.user_loader
+def load_user(user_id):
+    user_data = db.child("users").child(user_id).get()
+    if user_data.val() is None:
+        return None
+    user = User()
+    user.id = user_data.val()["id"]
+    user.email = user_data.val()["email"]
+    return user
+
 @app.route('/')
 def index():
     return redirect(url_for('router.home'))

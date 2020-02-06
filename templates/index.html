@@ -11,7 +11,10 @@
     <script src="{{url_for('static', filename='js/login_form.js')}}"></script>
 </head>
 
-{% extends "navigation-bar.html" %}
+<nav>
+  <div class="nav-wrapper blue darken-1"><a href="/" class="brand-logo">ratemyTA</a></div>
+</nav>
+
 {% block content %}
 
 <div class="wrapper">
@@ -26,39 +29,39 @@
         <div id="signup">   
           <h1>Sign Up for Free</h1>
           
-          <form action="/" method="post">
+          <form action="{{ url_for('router.signup') }}" method="POST" role="form">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="top-row">
+              <div class="field-wrap">
+                <label>
+                  First Name<span class="req">*</span>
+                </label>
+                <input type="text" required autocomplete="off" name="first_name"/>
+              </div>
           
-          <div class="top-row">
-            <div class="field-wrap">
-              <label>
-                First Name<span class="req">*</span>
-              </label>
-              <input type="text" required autocomplete="off" />
+              <div class="field-wrap">
+                <label>
+                  Last Name<span class="req">*</span>
+                </label>
+                <input type="text"required autocomplete="off" name="last_name"/>
+              </div>
             </div>
-        
-            <div class="field-wrap">
-              <label>
-                Last Name<span class="req">*</span>
-              </label>
-              <input type="text"required autocomplete="off"/>
-            </div>
-          </div>
 
-          <div class="field-wrap">
-            <label>
-              Email Address<span class="req">*</span>
-            </label>
-            <input type="email"required autocomplete="off"/>
-          </div>
-          
-          <div class="field-wrap">
-            <label>
-              Set A Password<span class="req">*</span>
-            </label>
-            <input type="password"required autocomplete="off"/>
-          </div>
-          
-          <button type="submit" class="button button-block"/>Get Started</button>
+            <div class="field-wrap">
+              <label>
+                Email Address<span class="req">*</span>
+              </label>
+              <input type="email"required autocomplete="off" name="email_addr"/>
+            </div>
+            
+            <div class="field-wrap">
+              <label>
+                Set A Password<span class="req">*</span>
+              </label>
+              <input type="password"required autocomplete="off" name="password"/>
+            </div>
+            
+            <button type="submit" class="button button-block" name="action"/>Get Started</button>
           
           </form>
 
@@ -67,20 +70,22 @@
         <div id="login">   
           <h1>Welcome Back!</h1>
           
-          <form action="/" method="post">
-          
+          <form action="{{ url_for('router.login') }}" method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="field-wrap">
             <label>
               Email Address<span class="req">*</span>
             </label>
-            <input type="email"required autocomplete="off"/>
+            <input type="text" name="email" />
+            <!-- <input type="email"required autocomplete="off"/> -->
           </div>
           
           <div class="field-wrap">
             <label>
               Password<span class="req">*</span>
             </label>
-            <input type="password"required autocomplete="off"/>
+            <input type="password" name="password" />
+            <!-- <input type="password"required autocomplete="off"/> -->
           </div>
           
           <p class="forgot"><a href="/reset_password">Forgot Password?</a></p>
