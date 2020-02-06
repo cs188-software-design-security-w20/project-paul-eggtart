@@ -17,13 +17,12 @@ class SignUpForm(FlaskForm):
     first_name = StringField('first_name', [validators.Length(min=1, max=50)])
     last_name = StringField('last_name', [validators.Length(min=1, max=50)])
     email_addr = StringField('email_addr', [validators.Length(min=1, max=50)])
-    uid = StringField('uid', [validators.Length(9)])
     password = StringField('password', [validators.Length(min=1, max=50)])
 
     def create_user(self, db, signup_form):
         print(signup_form.first_name.data)
         print(signup_form.last_name.data)
-        new_user = User(signup_form.uid.data)
+        new_user = User(len(db.child("users").get().val()))
         new_user.email = signup_form.email_addr.data
         new_user.first_name = signup_form.first_name.data
         new_user.last_name = signup_form.last_name.data
@@ -35,3 +34,4 @@ class SignUpForm(FlaskForm):
         new_user.remaining_views = 3
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
 
+    # def verify_email(self, email):
