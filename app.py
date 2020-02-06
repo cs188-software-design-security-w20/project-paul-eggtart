@@ -48,11 +48,11 @@ app = create_app('config')
 
 db = load.database()
 limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute", "10 per second"])
+current_session_user = db.child("users").child(1).get().val()
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    print(user_id)
     user_data = db.child("users").child(user_id).get()
     if user_data.val() is None:
         return None
