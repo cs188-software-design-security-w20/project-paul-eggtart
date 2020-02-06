@@ -18,6 +18,7 @@ from wtforms.validators import DataRequired
 from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
 from flask_login import UserMixin
+from flask_login import current_user
 
 
 
@@ -123,6 +124,33 @@ class User(UserMixin):
                 if hasattr(User, name):
                     attributes[name] = param
         return attributes
+
+    def number_views(self):
+        id_user = current_user.id
+        current_session_user = db.child("users").child(id_user).get().val()
+
+        if (current_session_user is not None):
+            num_views = current_session_user['remaining_views']
+            return num_views
+        else:
+            return None
+
+    def decrement_views(self,name_of_ta):
+        # Otherwise, decrement views by 1, update DB
+        id_user = current_user.id
+        current_session_user = db.child("users").child(id_user).get().val()
+        ta_viewable_list = db.child("users").child(id_user).child('viewable_ta').get()
+        for _, val in ta_viewable_list.val().items():
+            if val[0] == name_of_ta:
+            # If the TA is one of their viewable TAs, don't decrement views
+                return 
+        current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
+        db.child("users").child(id_user).update(current_session_user) # update db with new number of views
+                
+        ta_viewable_list2 = db.child("users").child(current_user.id).child('viewable_ta')
+        ta_viewable_list2.push({0: name_of_ta}) # update ta's that this person has seen
+        return 
+
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__)

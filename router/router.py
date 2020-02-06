@@ -79,11 +79,10 @@ def search():
         score = correction[0][1]
 
         #remove a view from the user
-        current_session_user = db.child("users").child(current_user.id).get().val()
-        ta_viewable_list = db.child("users").child(current_user.id).child('viewable_ta').get()
+        user = User()
+        num_views = user.number_views()
 
-        if (current_session_user is not None):
-            num_views = current_session_user['remaining_views']
+        if (num_views is not None):
             # current_session_user
             # no more views left
             if (num_views <= 0):
@@ -94,19 +93,8 @@ def search():
                 return render_template('search.html', form=search)
             else:
 
-                # If the TA is one of their viewable TAs, don't decrement views
-                for _, val in ta_viewable_list.val().items():
-                    if val[0] == name:
-                        return redirect('/TA/'+ name)
-
-                # Otherwise, decrement views by 1, update DB
-                current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
-                
-                db.child("users").child(current_user.id).update(current_session_user) # update db with new number of views
-                
-                ta_viewable_list2 = db.child("users").child(current_user.id).child('viewable_ta')
-                ta_viewable_list2.push({0: name}) # update ta's that this person has seen
-
+                #decrement views if needed
+                user.decrement_views(name)
                 return redirect('/TA/'+ name)
 
     return render_template('search.html', form=search)
