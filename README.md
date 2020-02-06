@@ -47,10 +47,12 @@ $ python3 app.py
 
 ## Work In Progress / To Do
 - Payment System
-- Search Page
-- Login 
-- Signup
-- search to search_bar (*?)
+- Encrypt End to End (Database)
+- Discuss and implement how to view each TA/comment and locking Ta's content
+- Clean Up Frontend for everything to make it match (Login/ Signup), Purchase.html, Search Page
+
+
+
 
 
 ## Sources

@@ -77,6 +77,8 @@ def search():
         name = correction[0][0]
         score = correction[0][1]
         #remove a view from the user
+
+        
         current_session_user = db.child("users").child(current_user.id).get().val()
 
         if(current_session_user is not None):
