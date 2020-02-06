@@ -161,7 +161,7 @@ def profile_edit():
 @router.route('/profile/edit', methods=['POST'])
 @login_required
 def profile_edit_add():
-    status = User.update_user(request.form)
+    status = User().update_user(request.form)
     if status == "Success":
         return redirect('/profile')
     else:
