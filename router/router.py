@@ -157,8 +157,11 @@ def signup():
 def profile():
     current_session_user = db.child("users").child(current_user.id).get().val()
     id = int(current_session_user['id'])
+    user, ta_list = User().get_user(db, id)
+    print(ta_list)
     context = {
-        "user": User().get_user(db, id)
+        "user": user,
+        "ta_list": ta_list
     }
     return render_template('profile.html', **context)
 

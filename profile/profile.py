@@ -75,9 +75,15 @@ class User(UserMixin):
 
     def get_user(self, db, username):
         user = db.child("users").child(username).get()
+        data = user.val()
         for key, val in user.val().items():
             setattr(self, key, val)
-        return self
+
+        ta_list = []
+        for ta in self.viewable_ta:
+            ta_list.append(str(data["viewable_ta"][ta][0]))
+
+        return self, ta_list
     
     def update_user(self, form, **kwargs):
         cls = self.model_class()

@@ -58,6 +58,18 @@
                                 <td>{{ user.credits }}</td>
                             </div>
                         </tr>
+                        <tr>
+                            <div class="col s5">
+                                <th>Viewable TAs</th>
+                                <td>
+                                    <ul>
+                                        {% for u in ta_list %}
+                                        <li><a href="/TA/{{ u }}">{{ u }}</a></li>
+                                        {% endfor %}
+                                    <ul>
+                                </td>
+                            </div>
+                        </tr>
                     </table>
 				</div>
                 <div class="box-footer">
