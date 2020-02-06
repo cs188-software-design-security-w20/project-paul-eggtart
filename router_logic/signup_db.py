@@ -12,6 +12,7 @@ from wtforms import TextAreaField, StringField, validators
 from load import database
 from profile.profile import User
 import json
+import re
 
 class SignUpForm(FlaskForm):
     first_name = StringField('first_name', [validators.Length(min=1, max=50)])
@@ -37,4 +38,8 @@ class SignUpForm(FlaskForm):
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
         db.child("users").child(new_user.id).child('viewable_ta').push({0:"placeholder"})
 
-    # def verify_email(self, email):
+    def verify_email(self, email):
+        check_email = re.match(r'.*@ucla.edu$', email)
+        if check_email != None:
+            return True
+        return False
