@@ -37,6 +37,7 @@ class User(UserMixin):
     viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
 
+
     @property
     def is_authenticated(self):
         return True
