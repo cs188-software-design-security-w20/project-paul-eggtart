@@ -22,7 +22,8 @@ class SignUpForm(FlaskForm):
     def create_user(self, db, signup_form):
         print(signup_form.first_name.data)
         print(signup_form.last_name.data)
-        new_user = User(len(db.child("users").get().val()))
+        new_user = User()
+        new_user.id = len(db.child("users").get().val())
         new_user.email = signup_form.email_addr.data
         new_user.first_name = signup_form.first_name.data
         new_user.last_name = signup_form.last_name.data
