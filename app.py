@@ -52,6 +52,8 @@ limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute
 
 @login_manager.user_loader
 def load_user(user_id):
+
+    print("USER IS HERE GOGOGOGOGOGOGO")
     user_data = db.child("users").child(user_id).get()
     user = User(0)
     if(user_data.val() is not None):

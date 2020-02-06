@@ -74,19 +74,21 @@ def search():
         name = correction[0][0]
         score = correction[0][1]
         #remove a view from the user
-        current_session_user = db.child("users").child(current_user.id).get().val()
-        num_views = current_session_user['remaining_views']
+        current_session_user = db.child("users").child(current_user.id)
+        if(current_session_user.get().val() is not None):
+            num_views = current_session_user.get().val()['remaining_views']
+            current_session_user
 
-        if(num_views <= 0 ): #no more views left
-            return render_template('purchase.html')
+            if(num_views <= 0 ): #no more views left
+                return render_template('purchase.html')
 
-        if(score < 90): # score is less than 90, so don't redirect, and don't waste a view
-            print("not_found")
-            return render_template('search.html', form=search)
-        else:
-            current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
-            db.child("users").child(current_user.id).update(current_session_user) # update db
-            return redirect('/TA/'+ name)
+            if(score < 90): # score is less than 90, so don't redirect, and don't waste a view
+                print("not_found")
+                return render_template('search.html', form=search)
+            else:
+                current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
+                db.child("users").child(current_user.id).update(current_session_user) # update db
+                return redirect('/TA/'+ name)
     return render_template('search.html', form=search)
 
 
