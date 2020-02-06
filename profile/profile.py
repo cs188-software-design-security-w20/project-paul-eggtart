@@ -50,8 +50,8 @@ class User(UserMixin):
     def is_anonymous(self):
         return False
 
-    def __init__(self, id):
-        self.id = id
+    def __init__(self):
+        return
     
     def get_id(self):
         try:
