@@ -36,8 +36,13 @@ $ python3 app.py
 ```
 
 ## Navigating the Site
-- /TA/paul-eggert
+Creating a new user will give the account 3 'remaining views' which are TA's which you are allowed to view the information of.
+A 'remaining view' is used up when you search a TA from the search bar.
+Once that TA has been associated with the account, the TA will always be viewable for the student.
+Once the three 'remaining view's are used up, the student will have to pay to get more views (not yet implemented)
 - /search
+- /TA/paul-eggert
+
 
 ### Example Search (Closest Match)
 - tian-ye becomes tian-ye
@@ -46,11 +51,17 @@ $ python3 app.py
 
 
 ## Work In Progress / To Do
-- Payment System
+FEATURES!
+- Payment System (getting more remaining views)
 - Encrypt End to End (Database)
-- Discuss and implement how to view each TA/comment and locking Ta's content
 - Clean Up Frontend for everything to make it match (Login/ Signup), Purchase.html, Search Page
 - add validators to verify @ucla.edu? 
+
+
+BUGS!
+- Next Password Reset Date 	<UnboundField(DateTimeField, ('password_reset',), {})>
+TODO!
+- Take down firebase key!
 
 
 
