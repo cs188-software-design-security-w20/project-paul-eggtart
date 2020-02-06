@@ -180,7 +180,6 @@ def profile_edit_add():
             "user": User().get_user(db, id)
         }
         return render_template('profile_edit.html', **context)
-<<<<<<< HEAD
 
 @router.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
@@ -205,5 +204,3 @@ def reset_password():
             return render_template('password_reset_email.html', form=form)
     return render_template('password_reset_email.html', form=form)
 
-=======
->>>>>>> 1d93261c8cb474a46682bfe478220340ffe8898a
