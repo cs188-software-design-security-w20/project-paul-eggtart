@@ -134,11 +134,11 @@ def logout():
 @router.route('/signup', methods=['POST'])
 def signup():
     signup_form = SignUpForm()
-    if signup_form.validate_on_submit():
+    if signup_form.validate_on_submit() and signup_form.verify_email(signup_form.email_addr.data):
         signup_form.create_user(db, signup_form)
         return redirect('/')
     else:
-        print("Form invalid")
+        print("Signup invalid")
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
