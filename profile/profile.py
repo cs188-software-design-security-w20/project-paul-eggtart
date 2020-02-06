@@ -37,6 +37,7 @@ class User(UserMixin):
     viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
 
+
     @property
     def is_authenticated(self):
         return True
@@ -51,7 +52,6 @@ class User(UserMixin):
 
     def __init__(self, id):
         self.id = id
-        return
     
     def get_id(self):
         try:
@@ -75,9 +75,15 @@ class User(UserMixin):
 
     def get_user(self, db, username):
         user = db.child("users").child(username).get()
+        data = user.val()
         for key, val in user.val().items():
             setattr(self, key, val)
-        return self
+
+        ta_list = []
+        for ta in self.viewable_ta:
+            ta_list.append(str(data["viewable_ta"][ta][0]))
+
+        return self, ta_list
     
     def update_user(self, form, **kwargs):
         cls = self.model_class()

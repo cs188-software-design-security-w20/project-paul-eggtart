@@ -25,5 +25,5 @@ class LoginForm(Form):
         for u in users:
             data = users[u]
             if data['email'] == user.email and data["password"] == user.password:
-                return "Success"
-        return "Failure"
+                return int(data['id'])
+        return -1

@@ -20,7 +20,7 @@ from search import searchBar, closest_match
 from profile.profile import User
 from load import database
 import datetime
-from flask_login import login_user, login_required, login_manager, current_user
+from flask_login import login_user, login_required, login_manager, current_user, logout_user
 
 
 # define the database
@@ -33,6 +33,7 @@ router = Blueprint(
 )
 
 @router.route('/TA/<ta_name>', methods=['GET', 'POST'])
+@login_required
 def TA(ta_name):
     ta_object = db.child("TA").child(ta_name).get()
 
@@ -40,9 +41,7 @@ def TA(ta_name):
     comments = parse_ta_comments(ta_object)
     ratings = parse_ta_ratings(ta_object)
     classes = get_ta_classes(ta_object)
-    print(ta_name)
     display_name = name_to_string(ta_name)
-    print(display_name)
     ta_info = (display_name, comments, ratings, classes)
 
     # adding comment to forum
@@ -53,7 +52,7 @@ def TA(ta_name):
     else:
         print("comment validate on submit failed...")
 
-    # addint rating to TA
+    # adding rating to TA
     my_rating = rating_form()
     if my_rating.validate_on_submit():
         submit_rating(db, ta_name, my_rating)
@@ -61,10 +60,13 @@ def TA(ta_name):
     else:
         print("rating validate on submit failed...")
 
-    # redner the template
-    return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
-        comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
-
+    # render the template
+    ta_viewable_list = db.child("users").child(current_user.id).child('viewable_ta').get()
+    for _, val in ta_viewable_list.val().items():
+        if val[0] == ta_name:
+            return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
+                comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
+    return render_template('search.html', form=search)
 
 
 @router.route('/search', methods=['GET', 'POST'])
@@ -75,20 +77,38 @@ def search():
         correction = closest_match(search.ta_name.data)
         name = correction[0][0]
         score = correction[0][1]
-        if(score < 90):
-            print("not_found")
-            return render_template('search.html', form=search)
-        else:
-            #remove a view from the user
-            current_session_user = db.child("users").child(current_user.id).get().val()
+
+        #remove a view from the user
+        current_session_user = db.child("users").child(current_user.id).get().val()
+        ta_viewable_list = db.child("users").child(current_user.id).child('viewable_ta').get()
+
+        if (current_session_user is not None):
             num_views = current_session_user['remaining_views']
-
-            if(num_views <= 0 ): #no more views left
+            # current_session_user
+            # no more views left
+            if (num_views <= 0):
                 return render_template('purchase.html')
+            # score is less than 90, so don't redirect, and don't waste a view
+            if (score < 90):
+                print("not_found")
+                return render_template('search.html', form=search)
+            else:
 
-            current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1 # decrement views by 1
-            db.child("users").child(current_user.id).update(current_session_user) # update db
-            return redirect('/TA/'+ name)
+                # If the TA is one of their viewable TAs, don't decrement views
+                for _, val in ta_viewable_list.val().items():
+                    if val[0] == name:
+                        return redirect('/TA/'+ name)
+
+                # Otherwise, decrement views by 1, update DB
+                current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
+                
+                db.child("users").child(current_user.id).update(current_session_user) # update db with new number of views
+                
+                ta_viewable_list2 = db.child("users").child(current_user.id).child('viewable_ta')
+                ta_viewable_list2.push({0: name}) # update ta's that this person has seen
+
+                return redirect('/TA/'+ name)
+
     return render_template('search.html', form=search)
 
 
@@ -101,21 +121,28 @@ def home():
 def login():
     login_form = LoginForm(request.form)
     if request.method == 'POST' and login_form.validate():
-        user = User(0)
+        user = User()
         user.email = login_form.email.data
         user.password = login_form.password.data
-        if login_form.login(user) == "Success":
-            print("Should've logged me in")
+        login_result = login_form.login(user)
+        if login_result != -1:
+            user.id = login_result
             if login_user(user) == True:
                 print("Successful login")
             else:
-                print("unsuccessful")
-            #next = request.args.get('next')
+                print("Unsuccessful")
+            # next = request.args.get('next')
             # if not is_safe_url(next):
             #     return flask.abort(400)
             return redirect(url_for('router.search'))
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
+@router.route('/logout', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('router.home'))
+    
 @router.route('/signup', methods=['POST'])
 def signup():
     signup_form = SignUpForm()
@@ -127,33 +154,39 @@ def signup():
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
+@login_required
 def profile():
+    current_session_user = db.child("users").child(current_user.id).get().val()
+    id = int(current_session_user['id'])
+    user, ta_list = User().get_user(db, id)
+    print(ta_list)
     context = {
-        "user": User.get_user(db, 1)
+        "user": user,
+        "ta_list": ta_list
     }
     return render_template('profile.html', **context)
 
 @router.route('/profile/edit', methods=['GET'])
-#@login_required
+@login_required
 def profile_edit():
     id = request.args.get('id', None)
-    parameters = User.get_parameters()
+    parameters = User().get_parameters()
     context = {
         "parameters": parameters,
-        "user": User.get_user(db, id)
+        "user": User().get_user(db, id)
     }
     return render_template('profile_edit.html', **context)
 
 @router.route('/profile/edit', methods=['POST'])
-#@login_required
+@login_required
 def profile_edit_add():
-    status = User.update_user(request.form)
+    status = User().update_user(request.form)
     if status == "Success":
         return redirect('/profile')
     else:
         id = request.form.get('id', None)
         context = {
-            "parameters": User.get_parameters(),
-            "user": User.get_user(db, id)
+            "parameters": User().get_parameters(),
+            "user": User().get_user(db, id)
         }
         return render_template('profile_edit.html', **context)

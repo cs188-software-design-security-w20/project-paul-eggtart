@@ -30,8 +30,10 @@ class SignUpForm(FlaskForm):
         new_user.authenticated = True
         new_user.password_reset = None
         new_user.credits = 0
-        new_user.viewable_ta = []
+        new_user.viewable_ta = ""
         new_user.remaining_views = 3
+        print(json.loads(new_user.toJSON()))
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
+        db.child("users").child(new_user.id).child('viewable_ta').push({0:"placeholder"})
 
     # def verify_email(self, email):
