@@ -10,27 +10,14 @@
   <li><a href="/logout">Logout</a></li>
 </ul>
 <nav>
-  <div class="nav-wrapper light-blue">
-    <a href="#" class="brand-logo">RatemyTA</a>
-    <!-- <ul id="nav-mobile" class = "center">
-      <li>
-        <form>
-          <div class="input-field center">
-            <input id="search" type="search" required>
-            <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-            <i class="material-icons">close</i>
-          </div>
-        </form>
-      </li>
-    </ul> -->
+
+  <div class="nav-wrapper light-blue"><a href="/search" style="padding-left: 80px;" class="brand-logo">ratemyTA</a>
     <ul id="nav-mobile" class="right">
-      <!-- <li><a href="/logout">Logout</a></li>
-      <li><a href="{{ url }}/profile">My Profile</a></li>
-      <li><a href="/search">Search Your TA</a></li> -->
       <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Account<i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
 </nav>
 
+{% extends "base.html" %}
 {% block content %}
 {% endblock %}

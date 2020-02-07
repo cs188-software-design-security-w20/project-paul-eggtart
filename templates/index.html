@@ -11,14 +11,16 @@
     <script src="{{url_for('static', filename='js/login_form.js')}}"></script>
 </head>
 
-<nav>
-  <div class="nav-wrapper blue darken-1"><a href="/" class="brand-logo">ratemyTA</a></div>
-</nav>
 
+
+<nav>
+  <div class="nav-wrapper blue darken-1"><a href="/" class="brand-logo" style="padding-left: 80px;">ratemyTA</a></div>
+</nav>
+{% extends "base.html" %}
 {% block content %}
 
 <div class="wrapper">
-    <div class="form">
+    <div class="form white">
       
       <ul class="tab-group">
         <li class="tab active"><a href="#signup">Sign Up</a></li>
@@ -27,7 +29,7 @@
       
       <div class="tab-content">
         <div id="signup">   
-          <h1>Sign Up for Free</h1>
+          <h1 >Sign Up for Free</h1>
           
           <form action="{{ url_for('router.signup') }}" method="POST" role="form">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
