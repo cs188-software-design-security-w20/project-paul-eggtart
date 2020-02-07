@@ -4,8 +4,9 @@ cffi==1.13.2
 Click==7.0
 cryptography==2.8
 Flask==1.0.2
+Flask-Bcrypt==0.7.1
 Flask-Limiter==1.1.0
-Flask-Login==0.4.1
+Flask-Login==0.4.0
 Flask-Mail==0.9.1
 Flask-SQLAlchemy==2.4.1
 Flask-User==1.0.1.5

@@ -21,6 +21,7 @@ from extensions import mail
 import json
 import re
 
+
 class SignUpForm(FlaskForm):
     first_name = StringField('first_name', [validators.Length(min=1, max=50)])
     last_name = StringField('last_name', [validators.Length(min=1, max=50)])
@@ -39,15 +40,16 @@ class SignUpForm(FlaskForm):
         new_user.email = signup_form.email_addr.data
         new_user.first_name = signup_form.first_name.data
         new_user.last_name = signup_form.last_name.data
-        new_user.password = signup_form.password.data
+        new_user.password = new_user.encrypt(signup_form.password.data) # encrypt the password
         new_user.authenticated = False
         new_user.password_reset = None
         new_user.credits = 0
         new_user.viewable_ta = ""
         new_user.remaining_views = 3
-        print(json.loads(new_user.toJSON()))
+        #print(json.loads(new_user.toJSON()))
+
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
-        db.child("users").child(new_user.id).child('viewable_ta').push({0:"placeholder"})
+        db.child("users").child(new_user.id).child('viewable_ta').push({'name': "placeholder", 'rated': False})
 
     def verify_email(self, email):
         check_email = re.match(r'.*@(g\.)?ucla.edu$', email)
