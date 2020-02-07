@@ -162,10 +162,11 @@ class User(UserMixin):
 
         salt = bcrypt.gensalt()
         hashed = bcrypt.hashpw(passwd, salt)
-        return(hashed)
+
+        return hashed.decode('utf-8') # convert it to string
 
     def decrypt(self,password_hashed,password_plain):
-        if bcrypt.checkpw(password_hashed, password_plain):
+        if bcrypt.checkpw(password_plain.encode('utf-8'),password_hashed.encode('utf-8')):
             #match
             return True
         else:
