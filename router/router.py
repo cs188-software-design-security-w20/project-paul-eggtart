@@ -137,6 +137,9 @@ def logout():
 def signup():
     signup_form = SignUpForm()
     if signup_form.validate_on_submit() and signup_form.verify_email(signup_form.email_addr.data):
+        if not signup_form.check_existing_email(db, signup_form.email_addr.data):
+            flash('An existing account has already been created with that email address. Please contact pauleggtarts@gmail.com for support.')
+            return redirect('/')
         signup_form.create_unauthenticated_user(db, signup_form)
         flash('Thanks for registering! Please check your email for a confirmation email.', 'success')
         return redirect('/')
@@ -253,12 +256,13 @@ def confirm_email(token):
     for u in users.each():
         data = u.val()
         if data['email'] == email:
-                user = data
+            user = data
     
-    if data['authenticated']:
+    print(user)
+    if user['authenticated']:
         flash('Account already confirmed. Please login.', 'info')
     else:
-        db.child("users").child(data['id']).update({"authenticated": "true"})
+        db.child("users").child(user['id']).update({"authenticated": "true"})
         flash('Thank you for confirming your email address!')
-    print("Email authenticated for" + email)
+    print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
