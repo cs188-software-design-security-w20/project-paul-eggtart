@@ -48,6 +48,7 @@ def create_app(config_file):
     return app
 
 app = create_app('config')
+
 db = load.database()
 limiter = Limiter(app,key_func=get_remote_address,default_limits=["20 per minute", "10 per second"])
 
