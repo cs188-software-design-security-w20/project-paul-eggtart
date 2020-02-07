@@ -117,14 +117,15 @@ def login():
         user.email = login_form.email.data
         user.password = login_form.password.data
         login_result = login_form.login(user)
-        if login_result != -1:
+        if login_result > 0:
             user.id = login_result
             if login_user(user) == True:
                 print("Successful login")
             else:
                 print("Unsuccessful")
             return redirect(url_for('router.search'))
-    flash("Incorrect email or password")
+        if login_result == -1:
+            flash("Incorrect email or password")
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/logout', methods=['GET'])
@@ -184,6 +185,29 @@ def profile_edit_add():
             "user": User().get_user(db, id)
         }
         return render_template('profile_edit.html', **context)
+
+@router.route('/reauthenticate', methods=['GET', 'POST'])
+def reauthenticate():
+    form = EmailForm()
+    signup = SignUpForm()
+    if form.validate_on_submit():
+        found = False
+        users = db.child("users").get()
+        for u in users.each():
+            data = u.val()
+            if data['email'] == form.email.data:
+                found = True
+                if data['authenticated'] is False:
+                    signup.send_confirmation_email(form.email.data)
+                    flash('Please check your email for an account confirmation link.', 'success')
+                else:
+                    flash('This account is already authenticated. Please sign in', 'error')
+                    return redirect(url_for('users.login'))
+                break
+        if found is False:
+            flash('Invalid email address!', 'error')
+            return render_template('reauthenticate.html', form=form)
+    return render_template('reauthenticate.html', form=form)
 
 @router.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():

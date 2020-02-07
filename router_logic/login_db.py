@@ -4,6 +4,7 @@ from flask import (
     redirect,
     url_for,
     jsonify,
+    flash,
     render_template
 )
 from flask_wtf import FlaskForm
@@ -25,6 +26,9 @@ class LoginForm(Form):
         users = db.child("users").get()
         for u in users.each():
             data = u.val()
+            if data['authenticated'] is False:
+                flash("Account not authenticated.")
+                return -2
             if data['email'] == user.email and decrypter.decrypt(data["password"],user.password): #data["password"] == user.password:
                 return int(data['id'])
         return -1
