@@ -57,6 +57,15 @@ class SignUpForm(FlaskForm):
             return True
         return False
     
+    def check_existing_email(self, db, email):
+        users = db.child("users").get()
+        email = email.split('@')[0]
+        for u in users.each():
+            data = u.val()
+            if data['email'].split('@')[0] == email:
+                return False
+        return True
+    
     def send_confirmation_email(self, email_addr):
         confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 
