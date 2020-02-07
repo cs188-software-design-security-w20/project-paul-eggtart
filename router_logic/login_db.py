@@ -24,6 +24,6 @@ class LoginForm(Form):
         users = db.child("users").get()
         for u in users.each():
             data = u.val()
-            if data['email'] == user.email and data['password'] == user.password:
-                return "Success"
-        return "Failure"
+            if data['email'] == user.email and data["password"] == user.password:
+                return int(data['id'])
+        return -1
