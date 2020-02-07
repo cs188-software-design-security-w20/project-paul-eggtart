@@ -21,9 +21,10 @@ class LoginForm(Form):
 
 
     def login(self, user):
+        decrypter = User() # we need the decrypt function from the user
         users = db.child("users").get()
         for u in users.each():
             data = u.val()
-            if data['email'] == user.email and data["password"] == user.password:
+            if data['email'] == user.email and decrypter.decrypt(data["password"],user.password): #data["password"] == user.password:
                 return int(data['id'])
         return -1

@@ -19,6 +19,8 @@ from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
 from flask_login import UserMixin
 from flask_login import current_user
+# ----- password db encryption portion
+import bcrypt
 
 
 
@@ -154,3 +156,18 @@ class User(UserMixin):
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__)
+
+    def encrypt(self,password_plain):
+        passwd = password_plain.encode('utf-8')
+
+        salt = bcrypt.gensalt()
+        hashed = bcrypt.hashpw(passwd, salt)
+
+        return hashed.decode('utf-8') # convert it to string
+
+    def decrypt(self,password_hashed,password_plain):
+        if bcrypt.checkpw(password_plain.encode('utf-8'),password_hashed.encode('utf-8')):
+            #match
+            return True
+        else:
+            return False

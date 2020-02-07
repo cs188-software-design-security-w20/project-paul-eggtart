@@ -50,11 +50,11 @@ body {
 }
 a {
   text-decoration: none;
-  color: #1ab188;
+  color: #3496E1;
   transition: 0.5s ease;
 }
 a:hover {
-  color: #179b77;
+  color: #3496E1;
 }
 .form {
   background: rgba(19, 35, 47, .9);
@@ -62,7 +62,7 @@ a:hover {
   max-width: 600px;
   margin: 40px auto;
   border-radius: 4px;
-  box-shadow: 0 4px 10px 4px rgba(19, 35, 47, .3);
+  box-shadow: 0 4px 10px 4px #3496E1;
 }
 .tab-group {
   list-style: none;
@@ -79,7 +79,7 @@ a:hover {
   text-decoration: none;
   padding: 15px;
   background: rgba(160, 179, 176, .25);
-  color: #a0b3b0;
+  color: #fff;
   font-size: 20px;
   float: left;
   width: 50%;
@@ -88,19 +88,27 @@ a:hover {
   transition: 0.5s ease;
 }
 .tab-group li a:hover {
-  background: #179b77;
+<<<<<<< HEAD
+  background: #1E88E5;
+  color: grey;
+}
+.tab-group .active a {
+  background: #1E88E5;
+=======
+  background: #3496E1;
   color: #fff;
 }
 .tab-group .active a {
-  background: #1ab188;
+  background: #3496E1;
   color: #fff;
+>>>>>>> defb951bc813493692d541986a2adf8b2e9d21d6
 }
 .tab-content > div:last-child {
   display: none;
 }
 h1 {
   text-align: center;
-  color: #fff;
+  color: grey;
   font-weight: 300;
   margin: 0 0 40px;
 }
@@ -108,7 +116,6 @@ label {
   position: absolute;
   transform: translateY(6px);
   left: 13px;
-  color: rgba(255, 255, 255, .5);
   transition: all 0.25s ease;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
@@ -116,7 +123,11 @@ label {
 }
 label .req {
   margin: 2px;
-  color: #1ab188;
+<<<<<<< HEAD
+  color: #1E88E5;
+=======
+  color: #3496E1;
+>>>>>>> defb951bc813493692d541986a2adf8b2e9d21d6
 }
 label.active {
   transform: translateY(50px);
@@ -127,7 +138,7 @@ label.active .req {
   opacity: 0;
 }
 label.highlight {
-  color: #fff;
+  color: grey;
 }
 input, textarea {
   font-size: 22px;
@@ -138,13 +149,13 @@ input, textarea {
   background: none;
   background-image: none;
   border: 1px solid #a0b3b0;
-  color: #fff;
+  color: grey;
   border-radius: 0;
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 input:focus, textarea:focus {
   outline: 0;
-  border-color: #1ab188;
+  border-color: #3496E1;
 }
 textarea {
   border: 2px solid #a0b3b0;
@@ -176,13 +187,17 @@ textarea {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  background: #1ab188;
+<<<<<<< HEAD
+  background: #1E88E5;
+=======
+  background: #3496E1;
+>>>>>>> defb951bc813493692d541986a2adf8b2e9d21d6
   color: #fff;
   transition: all 0.5s ease;
   -webkit-appearance: none;
 }
 .button:hover, .button:focus {
-  background: #179b77;
+  background: #3496E1;
 }
 .button-block {
   display: block;
