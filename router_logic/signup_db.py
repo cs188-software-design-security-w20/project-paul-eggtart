@@ -49,7 +49,7 @@ class SignUpForm(FlaskForm):
         #print(json.loads(new_user.toJSON()))
 
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
-        db.child("users").child(new_user.id).child('viewable_ta').push({0:"placeholder"})
+        db.child("users").child(new_user.id).child('viewable_ta').push({'name': "placeholder", 'rated': False})
 
     def verify_email(self, email):
         check_email = re.match(r'.*@ucla.edu$', email)
