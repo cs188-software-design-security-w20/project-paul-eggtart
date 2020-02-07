@@ -1,20 +1,19 @@
 <!-- Compiled and minified JavaScript -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
+<link rel="stylesheet" href="../static/sass/materialize.css">
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="{{ url }}/profile">Profile</a></li>
+  <li><a href="/logout">Logout</a></li>
+</ul>
 <nav>
-  <div class="nav-wrapper blue darken-1"><a href="#" class="brand-logo">ratemyTA</a>
+
+  <div class="nav-wrapper light-blue"><a href="#" style="padding-left: 80px;" class="brand-logo">ratemyTA</a>
     <ul id="nav-mobile" class="right">
-      <li><a href="/logout">Logout</a></li>
-    </ul>
-    <ul id="nav-mobile" class="right">
-      <li><a href="{{ url }}/profile">My Profile</a></li>
-    </ul>
-    <ul id="nav-mobile" class="right hide-on-med-and-down">
-      <li><a href="/search">Search Your TA</a></li>
+      <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Account<i class="material-icons right">arrow_drop_down</i></a></li>
     </ul>
   </div>
 </nav>

@@ -6,7 +6,9 @@
 
 
 
+{% extends "navigation-bar.html" %}
 {% block content %}
-<h1>Thank you for trying to reset your password. Please click the link below.</h1>
-<a href="{{ password_reset_url }}">{{ password_reset_url }}</a>
+<h1>Your account for Rate My TA was successfully created!</h1>
+<h1>Please click on the link below to confirm your email address and activate your account.</h1>
+<a href="{{ confirm_url }}">{{ confirm_url }}</a>
 {% endblock %}
