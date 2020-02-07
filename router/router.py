@@ -4,21 +4,26 @@ sys.path.append('./router_logic')
 
 # imports
 from flask import (
+    current_app,
     Blueprint,
     request,
     redirect,
     url_for,
     render_template,
     Flask,
-    escape
+    escape,
+    flash
 )
 from forum_forms import comment_form, rating_form
 from TA_functions import *
+from reset_password_form import PasswordForm
 from signup_db import SignUpForm
 from login_db import LoginForm
+from email_db import EmailForm, send_password_reset_email
 from search import searchBar, closest_match
 from profile.profile import User
 from load import database
+from itsdangerous import URLSafeTimedSerializer
 import datetime
 from flask_login import login_user, login_required, login_manager, current_user, logout_user
 
@@ -177,3 +182,61 @@ def profile_edit_add():
             "user": User().get_user(db, id)
         }
         return render_template('profile_edit.html', **context)
+
+@router.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    form = EmailForm()
+    if form.validate_on_submit():
+        found = False
+        users = db.child("users").get().val()
+        print(users)
+        for u in users:
+            data = users[u]
+            if data['email'] == form.email.data:
+                found = True
+                if data['authenticated'] is True:
+                    send_password_reset_email(form.email.data)
+                    flash('Please check your email for a password reset link.', 'success')
+                else:
+                    flash('Your email address must be confirmed before attempting a password reset.', 'error')
+                    return redirect(url_for('users.login'))
+                break
+        if found is False:
+            flash('Invalid email address!', 'error')
+            return render_template('password_reset_email.html', form=form)
+    return render_template('password_reset_email.html', form=form)
+
+@router.route('/reset/<token>', methods=["GET", "POST"])
+def reset_with_token(token):
+    try:
+        password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
+    except:
+        print('reset link is invalid')
+        #flash('The password reset link is invalid or has expired.', 'error')
+        return redirect(url_for('router.home'))
+ 
+    form = PasswordForm()
+ 
+    if form.validate_on_submit():
+        found = False
+        users = db.child("users").get().val()
+        print(users)
+        for u in users:
+            data = users[u]
+            if data['email'] == email:
+                found = True
+                id = data['id']
+                curr_pass = data['password']
+                if curr_pass == form.password.data:
+                    flash('new password cannot be a previous password')
+                    return render_template('reset_password_with_token.html', form=form, token=token)
+                payload = {}
+                print
+                payload['password'] = form.password.data
+                db.child("users").child(id).update(payload)
+                break
+        print('successful password reset?')
+        flash('Your password has been updated!', 'success')
+        return redirect(url_for('router.home'))
+    return render_template('reset_password_with_token.html', form=form, token=token)
