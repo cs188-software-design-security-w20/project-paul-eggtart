@@ -50,7 +50,7 @@ class SignUpForm(FlaskForm):
         db.child("users").child(new_user.id).child('viewable_ta').push({0:"placeholder"})
 
     def verify_email(self, email):
-        check_email = re.match(r'.*@ucla.edu$', email)
+        check_email = re.match(r'.*@(g\.)?ucla.edu$', email)
         if check_email != None:
             return True
         return False

@@ -263,5 +263,5 @@ def confirm_email(token):
     else:
         db.child("users").child(data['id']).update({"authenticated": "true"})
         flash('Thank you for confirming your email address!')
-    print("Email authenticated for" + email)
+    print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
