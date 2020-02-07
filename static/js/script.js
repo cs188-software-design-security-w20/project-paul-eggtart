@@ -8,5 +8,6 @@
         "superman": null
       }
     });
+    $(".dropdown-trigger").dropdown();
   });
 

@@ -134,7 +134,7 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('router.home'))
-    
+
 @router.route('/signup', methods=['POST'])
 def signup():
     signup_form = SignUpForm()
