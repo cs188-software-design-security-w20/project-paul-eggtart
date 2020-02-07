@@ -6,7 +6,7 @@
 <script src="{{url_for('static', filename='js/script.js')}}"></script>
 
 
-{% extends "navigation-bar.html" %}
+{% extends "base.html" %}
 {% block content %}
 <form action="{{ url_for('router.reauthenticate') }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>

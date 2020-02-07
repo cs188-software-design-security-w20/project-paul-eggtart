@@ -197,12 +197,13 @@ def reauthenticate():
             data = u.val()
             if data['email'] == form.email.data:
                 found = True
+                print(data['authenticated'])
                 if data['authenticated'] is False:
                     signup.send_confirmation_email(form.email.data)
                     flash('Please check your email for an account confirmation link.', 'success')
                 else:
                     flash('This account is already authenticated. Please sign in', 'error')
-                    return redirect(url_for('users.login'))
+                    return redirect(url_for('router.home'))
                 break
         if found is False:
             flash('Invalid email address!', 'error')
@@ -225,7 +226,7 @@ def reset_password():
                     flash('Please check your email for a password reset link.', 'success')
                 else:
                     flash('Your email address must be confirmed before attempting a password reset.', 'error')
-                    return redirect(url_for('users.login'))
+                    return redirect(url_for('router.home'))
                 break
         if found is False:
             flash('Invalid email address!', 'error')
@@ -286,7 +287,7 @@ def confirm_email(token):
     if user['authenticated']:
         flash('Account already confirmed. Please login.', 'info')
     else:
-        db.child("users").child(user['id']).update({"authenticated": "true"})
+        db.child("users").child(user['id']).update({"authenticated": True})
         flash('Thank you for confirming your email address!')
     print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
