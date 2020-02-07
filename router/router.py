@@ -123,10 +123,8 @@ def login():
                 print("Successful login")
             else:
                 print("Unsuccessful")
-            # next = request.args.get('next')
-            # if not is_safe_url(next):
-            #     return flask.abort(400)
             return redirect(url_for('router.search'))
+    flash("Incorrect email or password")
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/logout', methods=['GET'])
@@ -232,7 +230,6 @@ def reset_with_token(token):
                     flash('new password cannot be a previous password')
                     return render_template('reset_password_with_token.html', form=form, token=token)
                 payload = {}
-                print
                 payload['password'] = form.password.data
                 db.child("users").child(id).update(payload)
                 break
