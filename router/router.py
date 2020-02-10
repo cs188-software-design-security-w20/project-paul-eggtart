@@ -82,23 +82,18 @@ def search():
         name = correction[0][0]
         score = correction[0][1]
 
-        #remove a view from the user
         user = User()
         num_views = user.number_views()
 
-        if (num_views is not None):
-            # current_session_user
-            # no more views left
-            if (num_views <= 0):
+        if num_views is not None:
+            if num_views <= 0 and not user.ta_viewable(name):
                 return render_template('purchase.html')
-            # score is less than 90, so don't redirect, and don't waste a view
+            # if match score less than 90, don't redirect and waste a view
             if (score < 90):
                 print("not_found")
                 return render_template('search.html', form=search)
             else:
-
-                #decrement views if needed
-                user.decrement_views(name)
+                user.handle_viewlist(name)
                 return redirect('/TA/'+ name)
 
     return render_template('search.html', form=search)

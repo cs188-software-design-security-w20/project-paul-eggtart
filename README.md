@@ -3,7 +3,7 @@
 ## Table of Contents
 * [Introduction](#intro)
 * [Getting Started](#getting-started)
-* [Navigating the Site](#navigating-the-site)
+* [Features](#features)
 * [Work In Progress / To Do](#work-in-progress/to-do)
 * [Sources](#sources)
 
@@ -35,37 +35,38 @@ $ pip install -r requirements.txt
 $ python3 app.py
 ```
 
-## Navigating the Site
-Creating a new user will give the account 3 'remaining views' which are TA's which you are allowed to view the information of.
-A 'remaining view' is used up when you search a TA from the search bar.
-Once that TA has been associated with the account, the TA will always be viewable for the student.
-Once the three 'remaining view's are used up, the student will have to pay to get more views (not yet implemented)
 
-Users are allowed to rate each of their viewable TAs one time, but comment as many times as they want
-- /search
-- /TA/paul-eggert
+## Features
+### Account Management
+- Creating a new account will give 3 'remaining views', the amount of TAs which the account can access
+- During the 'look up' of a new TA, a 'remaining view' will be used up, the TA will be added to your list
+- Attempting a direct lookup of a new TA will keep you on the search page (this will not use a token)
 
+### Sign Up / Login
+- Tracks which TAs are viewable by your account and how many more TAs may be added to that list
+- Access restricted for viewing non-viewable TA pages, taken to credit purchasing page
+- Verifies for @ucla.edu account upon sign-up
+- Password encryption 
 
-### Example Search (Closest Match)
-- tian-ye becomes tian-ye
-- tian becomes tian-ye
-- paul becomes paul-eggert
+### Forum
+- Comments are allowed for viewable TA's as many times as necessary
+- Rating is allowed once per TA that is viewable by the account
+
 
 
 ## Work In Progress / To Do
 FEATURES!
 - Payment System (getting more remaining views)
-- Encrypt End to End (Database)
-- Clean Up Frontend for everything to make it match (Login/ Signup), Purchase.html, Search Page
-- add validators to verify @ucla.edu? 
-
+- Encrypt End to End (Database) (Should we do more than just the password?)
+- Clean Up Frontend for Purchase.html
+- More feedback on Ratings/Login/Signup which didn't work?
 
 BUGS!
 - Next Password Reset Date 	<UnboundField(DateTimeField, ('password_reset',), {})>
+- $2b$12$iCztfwQpiF5.8itBy1n/IOe1sTE2ZFkafrUVDpeOqeunREmznFMjS PASSWORD SHOULD NOT BE SHOWN IN ACCOUNT / UNENCRYPT IT / MAKE IT CIRCLES
+
 TODO!
 - Take down firebase key!
-
-
 
 
 

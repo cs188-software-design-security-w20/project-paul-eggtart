@@ -40,7 +40,6 @@ class User(UserMixin):
     viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
 
-
     @property
     def is_authenticated(self):
         return True
@@ -58,7 +57,7 @@ class User(UserMixin):
     
     def get_id(self):
         try:
-            user_list = db.child("users").get()
+            user_list = db.child('users').get()
             for i in user_list.each():
                 if(i.val() is not None):
                     if self.email == (i.val()["email"]): #return the id associated with this email
@@ -75,9 +74,8 @@ class User(UserMixin):
     def model_class(self):
         return User
 
-
     def get_user(self, db, username):
-        user = db.child("users").child(username).get()
+        user = db.child('users').child(username).get()
         data = user.val()
         for key, val in user.val().items():
             setattr(self, key, val)
@@ -96,7 +94,7 @@ class User(UserMixin):
             if val == '':
                 del attributes[key]
         id = attributes["id"]
-        db.child("users").child(id).update(attributes)
+        db.child('users').child(id).update(attributes)
         return "Success"
 
     def get_parameters(self):
@@ -129,29 +127,37 @@ class User(UserMixin):
 
     def number_views(self):
         id_user = current_user.id
-        current_session_user = db.child("users").child(id_user).get().val()
+        current_session_user = db.child('users').child(id_user).get().val()
 
         if (current_session_user is not None):
             num_views = current_session_user['remaining_views']
             return num_views
         else:
             return None
-
-    def decrement_views(self, name_of_ta):
-        # Otherwise, decrement views by 1, update DB
+    
+    # Return whether the TA is viewable or not
+    def ta_viewable(self, ta_name):
         id_user = current_user.id
-        current_session_user = db.child("users").child(id_user).get().val()
-        ta_viewable_list = db.child("users").child(id_user).child('viewable_ta').get()
+        ta_viewable_list = db.child('users').child(id_user).child('viewable_ta').get()
         for _, val in ta_viewable_list.val().items():
-            if val['name'] == name_of_ta:
-            # If the TA is one of their viewable TAs, don't decrement views
-                return
+            if val['name'] == ta_name:
+                return True
+        return False
+
+    # decrement views if they need to be
+    def handle_viewlist(self, ta_name):
+        id_user = current_user.id
+        current_session_user = db.child('users').child(id_user).get().val()
+
+        if self.ta_viewable(ta_name):
+            return False
+
+        # update db with decremented number of views
         current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
-        db.child("users").child(id_user).update(current_session_user) # update db with new number of views
-                
-        ta_viewable_list2 = db.child("users").child(current_user.id).child('viewable_ta')
-        ta_viewable_list2.push({'name': name_of_ta, 'rated': False}) # update ta's that this person has seen
-        return 
+        db.child('users').child(id_user).update(current_session_user)
+        # add new TA to the viewables list
+        db.child('users').child(current_user.id).child('viewable_ta').push({'name': ta_name, 'rated': False})
+        return True
 
 
     def toJSON(self):
