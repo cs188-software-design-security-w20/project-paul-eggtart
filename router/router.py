@@ -26,6 +26,7 @@ from load import database
 from itsdangerous import URLSafeTimedSerializer
 import datetime
 from flask_login import login_user, login_required, login_manager, current_user, logout_user
+from purchase import purchase_form
 
 
 # define the database
@@ -286,3 +287,17 @@ def confirm_email(token):
         flash('Thank you for confirming your email address!')
     print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
+
+
+@router.route('/purchase_credits', methods=['GET', 'POST'])
+#@login_required
+def verify_card():
+    form = purchase_form()
+    if form.validate_on_submit():
+        if(form.process_payment(form.card.data)):
+            flash('Payment Processed successfully!')
+        else:
+            flash('Bad credit card')
+    return render_template('purchase.html',form=form)
+
+

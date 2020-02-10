@@ -16,6 +16,7 @@ from flask_mail import Mail, Message
 import load
 
 
+
 login_manager = LoginManager()
 
 def create_app(config_file):
@@ -61,7 +62,6 @@ def load_user(user_id):
     user.id = user_data.val()["id"]
     user.email = user_data.val()["email"]
     return user
-
 
 
 @login_manager.user_loader
