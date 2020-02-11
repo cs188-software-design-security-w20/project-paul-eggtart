@@ -8,7 +8,7 @@ from flask import (
     render_template
 )
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired, Regexp, Length
+from wtforms.validators import DataRequired, Regexp, Length, EqualTo
 from wtforms import TextAreaField, StringField, PasswordField, validators
 from load import database
 from profile.profile import User
@@ -27,7 +27,8 @@ class SignUpForm(FlaskForm):
     first_name = StringField('first_name', [validators.Length(min=1, max=50)])
     last_name = StringField('last_name', [validators.Length(min=1, max=50)])
     email_addr = StringField('email_addr', [validators.Length(min=1, max=50)])
-    password = StringField('password', [DataRequired(), Length(min=1, max=50), Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$",0,'Password must have at least one letter, one number and one special character')])
+    password = StringField('password', [DataRequired(), EqualTo('retype_password', "Passwords must match"), Length(min=1, max=50), Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$",0,'Password must have at least one letter, one number and one special character')])
+    retype_password = StringField('retype_password', [DataRequired()])
 
     def create_unauthenticated_user(self, db, signup_form):
         # SEND AN EMAIL CONFIRMATION

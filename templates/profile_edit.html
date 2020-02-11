@@ -44,15 +44,13 @@
                                         </div>
                                     </tr>
                                 {% endif %}
-                            
-                            
                                 {% if parameter.name == "email" %}
                                 <tr>
                                 <div class="col s5">
                                     <th>Email</th>
                                     <td>
                                     <input type="text" class="form-control" name="{{parameter.name}}"
-                                        placeholder="{{ user.email }}">
+                                        placeholder="{{ user.email }}" readonly=true>
                                     </td>
                                 </div>
                                 </tr>
@@ -62,8 +60,15 @@
                                     <div class="col s5">
                                         <th>Password</th>
                                         <td>
-                                        <input type="text" class="form-control" name="{{parameter.name}}"
-                                            placeholder="{{ user.password }}">
+                                        <input type="password" class="form-control" name="{{parameter.name}}">
+                                        </td>
+                                    </div>
+                                </tr>
+                                <tr>
+                                    <div class="col s5">
+                                        <th>Retype Password</th>
+                                        <td>
+                                        <input type="password" class="form-control" name="retype_password">
                                         </td>
                                     </div>
                                 </tr>
