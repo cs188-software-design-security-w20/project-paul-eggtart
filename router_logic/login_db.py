@@ -29,6 +29,7 @@ class LoginForm(Form):
             if data['email'] == user.email and decrypter.decrypt(data["password"],user.password): #data["password"] == user.password:
                 if data['authenticated'] is False:
                     flash("Account not authenticated. Please reauthenticate.")
+                    print("here")
                     return -2
                 return int(data['id'])
         return -1

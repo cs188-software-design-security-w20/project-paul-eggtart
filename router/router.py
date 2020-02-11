@@ -114,7 +114,7 @@ def login():
         user.email = login_form.email.data
         user.password = login_form.password.data
         login_result = login_form.login(user)
-        if login_result > 0:
+        if login_result >= 0:
             user.id = login_result
             if login_user(user) == True:
                 print("Successful login")
@@ -164,10 +164,12 @@ def profile():
 @login_required
 def profile_edit():
     id = request.args.get('id', None)
+    print(id)
     parameters = User().get_parameters()
+    user, _ = User().get_user(db, id)
     context = {
         "parameters": parameters,
-        "user": User().get_user(db, id)
+        "user": user
     }
     return render_template('profile_edit.html', **context)
 
@@ -179,9 +181,10 @@ def profile_edit_add():
         return redirect('/profile')
     else:
         id = request.form.get('id', None)
+        user, _ = User().get_user(db, id)
         context = {
             "parameters": User().get_parameters(),
-            "user": User().get_user(db, id)
+            "user": user
         }
         return render_template('profile_edit.html', **context)
 

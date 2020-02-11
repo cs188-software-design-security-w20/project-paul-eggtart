@@ -3,10 +3,12 @@ from flask import (
     request,
     redirect,
     url_for,
+    flash,
     render_template
 )
 from load import database
 import datetime
+import re
 from flask_wtf import FlaskForm
 from wtforms import Form
 from wtforms import StringField
@@ -88,12 +90,30 @@ class User(UserMixin):
     
     def update_user(self, form, **kwargs):
         cls = self.model_class()
+        
         names = self.get_properties()
         attributes = self.validate_data(names, form)
+        id = attributes["id"]
+        current_user,_ = self.get_user(db, id)
+        attributes["retype_password"] = form.get("retype_password")
         for key, val in list(attributes.items()):
             if val == '':
                 del attributes[key]
-        id = attributes["id"]
+        if "password" in attributes:
+            reset_password = True
+            if "retype_password" in attributes:
+                if attributes["password"] != attributes["retype_password"]:
+                    flash("Updated passwords do not match")
+                    return "Fail"
+                if not re.match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$", attributes["password"]):
+                    flash("Password must have at least one letter, one number and one special character")
+                    return "Fail"
+        if reset_password:
+            if attributes["password"] == current_user.password:
+                flash("Password cannot match old password")
+                return "Fail"
+            del attributes["retype_password"] 
+            attributes["password"] = self.encrypt(attributes["password"])
         db.child('users').child(id).update(attributes)
         return "Success"
 
