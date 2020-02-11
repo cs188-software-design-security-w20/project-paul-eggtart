@@ -17,6 +17,7 @@ from email_db import send_email
 from itsdangerous import URLSafeTimedSerializer
 from flask_mail import Message
 from extensions import mail
+import datetime
 # ------
 import json
 import re
@@ -29,9 +30,6 @@ class SignUpForm(FlaskForm):
     password = StringField('password', [DataRequired(), Length(min=1, max=50), Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$",0,'Password must have at least one letter, one number and one special character')])
 
     def create_unauthenticated_user(self, db, signup_form):
-        print(signup_form.first_name.data)
-        print(signup_form.last_name.data)
-
         # SEND AN EMAIL CONFIRMATION
         self.send_confirmation_email(signup_form.email_addr.data)
         # CREATES A USER AND PUSHES IT INTO DB
@@ -42,7 +40,8 @@ class SignUpForm(FlaskForm):
         new_user.last_name = signup_form.last_name.data
         new_user.password = new_user.encrypt(signup_form.password.data) # encrypt the password
         new_user.authenticated = False
-        new_user.password_reset = None
+        reset_date = datetime.datetime.now() + datetime.timedelta(6*365/12)
+        new_user.password_reset = reset_date.isoformat()
         new_user.credits = 0
         new_user.viewable_ta = ""
         new_user.remaining_views = 3
