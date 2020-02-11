@@ -99,6 +99,7 @@ class User(UserMixin):
         for key, val in list(attributes.items()):
             if val == '':
                 del attributes[key]
+        reset_password = False
         if "password" in attributes:
             reset_password = True
             if "retype_password" in attributes:
