@@ -8,8 +8,8 @@ from flask import (
     render_template
 )
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
-from wtforms import TextAreaField, StringField, validators
+from wtforms.validators import DataRequired, Regexp, Length
+from wtforms import TextAreaField, StringField, PasswordField, validators
 from load import database
 from profile.profile import User
 # ------ to send email conirmation
@@ -26,7 +26,7 @@ class SignUpForm(FlaskForm):
     first_name = StringField('first_name', [validators.Length(min=1, max=50)])
     last_name = StringField('last_name', [validators.Length(min=1, max=50)])
     email_addr = StringField('email_addr', [validators.Length(min=1, max=50)])
-    password = StringField('password', [validators.Length(min=1, max=50)])
+    password = StringField('password', [DataRequired(), Length(min=1, max=50), Regexp("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$",0,'Password must have at least one letter, one number and one special character')])
 
     def create_unauthenticated_user(self, db, signup_form):
         print(signup_form.first_name.data)

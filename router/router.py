@@ -27,6 +27,7 @@ from itsdangerous import URLSafeTimedSerializer
 import datetime
 from flask_login import login_user, login_required, login_manager, current_user, logout_user
 from purchase import purchase_form
+from wtforms import ValidationError
 
 
 # define the database
@@ -135,13 +136,15 @@ def signup():
     signup_form = SignUpForm()
     if signup_form.validate_on_submit() and signup_form.verify_email(signup_form.email_addr.data):
         if not signup_form.check_existing_email(db, signup_form.email_addr.data):
-            flash('An existing account has already been created with that email address. Please contact pauleggtarts@gmail.com for support.')
+            flash('An existing account has already been created with that email address. Please login or contact pauleggtarts@gmail.com for support.')
             return redirect('/')
         signup_form.create_unauthenticated_user(db, signup_form)
         flash('Thanks for registering! Please check your email for a confirmation email.', 'success')
         return redirect('/')
     else:
-        print("Signup invalid")
+        for error in signup_form.errors:
+            for e in signup_form.errors[error]:
+                flash(e)
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
