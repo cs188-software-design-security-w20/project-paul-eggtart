@@ -123,6 +123,8 @@ def login():
             return redirect(url_for('router.search'))
         if login_result == -1:
             flash("Incorrect email or password")
+        if login_result == -3:
+            return redirect(url_for('router.reset_password'))
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/logout', methods=['GET'])
@@ -214,10 +216,9 @@ def reset_password():
     form = EmailForm()
     if form.validate_on_submit():
         found = False
-        users = db.child("users").get().val()
-        print(users)
-        for u in users:
-            data = users[u]
+        users = db.child("users").get()
+        for u in users.each():
+            data = u.val()
             if data['email'] == form.email.data:
                 found = True
                 if data['authenticated'] is True:
@@ -251,15 +252,18 @@ def reset_with_token(token):
         for u in users.each():
             data = u.val()
             if data['email'] == email:
+                curr_user = User()
                 found = True
                 id = data['id']
                 curr_pass = data['password']
-                if curr_pass == form.password.data:
+                if curr_user.decrypt(curr_pass, form.password.data):
                     flash('new password cannot be a previous password')
                     return render_template('reset_password_with_token.html', form=form, token=token)
+                
                 payload = {}
-                payload['password'] = form.password.data
+                payload['password'] = curr_user.encrypt(form.password.data)
                 db.child("users").child(id).update(payload)
+                curr_user.update_password_reset(id)
                 break
         print('successful password reset?')
         flash('Your password has been updated!', 'success')

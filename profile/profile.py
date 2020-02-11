@@ -134,6 +134,10 @@ class User(UserMixin):
             return num_views
         else:
             return None
+
+    def update_password_reset(self, id):
+        reset_date_time = (datetime.datetime.now() + datetime.timedelta(6*365/12)).isoformat()
+        db.child('users').child(id).update({"password_reset": reset_date_time})
     
     # Return whether the TA is viewable or not
     def ta_viewable(self, ta_name):
