@@ -293,14 +293,18 @@ def confirm_email(token):
 
 
 @router.route('/purchase_credits', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def verify_card():
     form = purchase_form()
     if form.validate_on_submit():
-        if(form.process_payment(form.card.data)):
-            flash('Payment Processed successfully!')
-        else:
-            flash('Bad credit card')
+        if(form.little.data): # purchased
+            if(form.process_payment(form.card.data)):
+                flash('Payment Processed successfully!')
+                user = db.child("users").child(current_user.id).get().val()
+                new_views = user["remaining_views"] + 10 # update views by 10
+                db.child("users").child(current_user.id).update({"remaining_views": new_views})
+            else:
+                flash('Bad credit card')
     return render_template('purchase.html',form=form)
 
 
