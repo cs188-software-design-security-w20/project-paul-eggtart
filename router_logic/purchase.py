@@ -11,7 +11,7 @@ class purchase_form(FlaskForm):
     def process_payment(self,card_num): # returns true/false based on whether credit card was successfully processed
         PARAMS = {'card':card_num} 
           
-        # sending get request and saving the response as response object 
+        # Dummy API I created to verify credit cards (true if the length of the card is 16)
         r = requests.get(url = "https://yanggatang.pythonanywhere.com/verify_card", params = PARAMS) 
 
         if r.text == "False":
