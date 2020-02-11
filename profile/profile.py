@@ -109,11 +109,13 @@ class User(UserMixin):
                     flash("Password must have at least one letter, one number and one special character")
                     return "Fail"
         if reset_password:
-            if attributes["password"] == current_user.password:
+            if self.decrypt(current_user.password, attributes["password"]):
                 flash("Password cannot match old password")
                 return "Fail"
             del attributes["retype_password"] 
+
             attributes["password"] = self.encrypt(attributes["password"])
+            self.update_password_reset(id)
         db.child('users').child(id).update(attributes)
         return "Success"
 
