@@ -10,7 +10,6 @@ from load import database
 import datetime
 
 
-
 ######################################################################################
 ######################################################################################
 ########################### T.A. NAMES, GLOBAL VARIABLES #############################
@@ -18,9 +17,7 @@ import datetime
 ######################################################################################
 
 
-
 def get_ta_list():
-
     ta_list = [
         "paul-eggert",
         "tian-ye",
@@ -31,7 +28,6 @@ def get_ta_list():
     return ta_list
 
 def name_to_string(ta_name):
-
     dictionary = {
         "paul-eggert": "Paul R. Eggert",
         "tian-ye": "Tian Ye",
@@ -42,7 +38,6 @@ def name_to_string(ta_name):
     return dictionary[ta_name]
 
 
-
 ######################################################################################
 ######################################################################################
 ############# T.A. FORUM FORM HANDLING FUNCTIONS (SET/GET DATABSE) ###################
@@ -50,6 +45,12 @@ def name_to_string(ta_name):
 ######################################################################################
 
 
+def get_ta_info(ta_object, ta_name):
+    comments = parse_ta_comments(ta_object)
+    ratings = parse_ta_ratings(ta_object)
+    classes = get_ta_classes(ta_object)
+    display_name = name_to_string(ta_name)
+    return (display_name, comments, ratings, classes)
 
 def parse_ta_comments(ta_object):
     comments = []
@@ -61,8 +62,6 @@ def parse_ta_comments(ta_object):
             comments.append((val["comment"], str_datetime))
     
     return comments
-
-
 
 def parse_ta_ratings(ta_object):
     ratings = [0, [0, 0, 0]]
@@ -92,8 +91,6 @@ def get_ta_classes(ta_object):
 
     return classes
 
-
-
 def submit_comment(db, ta_name, my_comment):
     comment_datetime = datetime.datetime.now().isoformat()
     # print(my_comment.comment.data)
@@ -103,8 +100,6 @@ def submit_comment(db, ta_name, my_comment):
         "comment_datetime": comment_datetime
     })
     # print("pushed comment")
-
-
 
 def submit_rating(db, ta_name, my_rating):
     # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])

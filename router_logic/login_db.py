@@ -8,9 +8,8 @@ from flask import (
     render_template
 )
 from flask_wtf import FlaskForm
-from wtforms import Form
+from wtforms import Form, TextAreaField, StringField, validators
 from wtforms.validators import DataRequired
-from wtforms import TextAreaField, StringField, validators
 from load import database
 from profile.profile import User
 import datetime
@@ -20,7 +19,6 @@ db = database()
 class LoginForm(Form):
     email = StringField('email', validators=[DataRequired()])
     password = StringField('password', validators=[DataRequired()]) 
-
 
     def login(self, user):
         decrypter = User() # we need the decrypt function from the user

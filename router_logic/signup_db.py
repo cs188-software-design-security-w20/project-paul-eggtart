@@ -10,6 +10,7 @@ from flask import (
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, Regexp, Length, EqualTo
 from wtforms import TextAreaField, StringField, PasswordField, validators
+from wtforms.validators import DataRequired, Regexp, Length
 from load import database
 from profile.profile import User
 # ------ to send email conirmation
@@ -46,7 +47,7 @@ class SignUpForm(FlaskForm):
         new_user.credits = 0
         new_user.viewable_ta = ""
         new_user.remaining_views = 3
-        #print(json.loads(new_user.toJSON()))
+        # print(json.loads(new_user.toJSON()))
 
         db.child("users").child(new_user.id).set(json.loads(new_user.toJSON()))
         db.child("users").child(new_user.id).child('viewable_ta').push({'name': "placeholder", 'rated': False})
@@ -56,7 +57,7 @@ class SignUpForm(FlaskForm):
         if check_email != None:
             return True
         return False
-    
+
     def check_existing_email(self, db, email):
         users = db.child("users").get()
         email = email.split('@')[0]
@@ -65,7 +66,7 @@ class SignUpForm(FlaskForm):
             if data['email'].split('@')[0] == email:
                 return False
         return True
-    
+
     def send_confirmation_email(self, email_addr):
         confirm_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 

@@ -1,9 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
 from wtforms import TextAreaField, StringField, validators
+from wtforms.validators import DataRequired
 from fuzzywuzzy import fuzz, process
 from TA_functions import *
-
 
 
 def closest_match(search):

@@ -8,8 +8,8 @@ from flask import (
     render_template
 )
 from flask_wtf import FlaskForm
-from wtforms.validators import DataRequired
 from wtforms import TextAreaField, StringField, validators
+from wtforms.validators import DataRequired
 from load import database
 from profile.profile import User
 from itsdangerous import URLSafeTimedSerializer
@@ -21,7 +21,6 @@ class EmailForm(FlaskForm):
 
 def send_email(subject, recipients, html_body):
     msg = Message(subject, recipients=recipients)
-    #msg.body = text_body
     msg.body = ""
     msg.html = html_body
     print("about to send...")

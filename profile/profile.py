@@ -1,3 +1,6 @@
+import datetime
+import json
+import re
 from flask import (
     Blueprint,
     request,
@@ -7,26 +10,14 @@ from flask import (
     render_template
 )
 from load import database
-import datetime
-import re
 from flask_wtf import FlaskForm
-from wtforms import Form
-from wtforms import StringField
-from wtforms import BooleanField
-from wtforms import DateTimeField
-from wtforms import FieldList
-from wtforms import SubmitField
+from wtforms import Form, TextAreaField, TextField, StringField, BooleanField, DateTimeField, FieldList, SubmitField, validators
 from wtforms.validators import DataRequired
-from wtforms import TextAreaField, TextField, validators
 from wtforms.fields.html5 import IntegerField
-from flask_login import UserMixin
-from flask_login import current_user
+from flask_login import UserMixin, current_user
 # ----- password db encryption portion
 import bcrypt
 
-
-
-import json
 
 db = database()
 
@@ -148,11 +139,10 @@ class User(UserMixin):
                     attributes[name] = param
         return attributes
 
+    # Return number of views left to user, return None if no user exists
     def number_views(self):
-        id_user = current_user.id
-        current_session_user = db.child('users').child(id_user).get().val()
-
-        if (current_session_user is not None):
+        current_session_user = db.child('users').child(current_user.id).get().val()
+        if current_session_user is not None:
             num_views = current_session_user['remaining_views']
             return num_views
         else:
@@ -164,8 +154,7 @@ class User(UserMixin):
     
     # Return whether the TA is viewable or not
     def ta_viewable(self, ta_name):
-        id_user = current_user.id
-        ta_viewable_list = db.child('users').child(id_user).child('viewable_ta').get()
+        ta_viewable_list = db.child('users').child(current_user.id).child('viewable_ta').get()
         print(ta_viewable_list.val().items())
         
         for _, val in ta_viewable_list.val().items():
@@ -175,34 +164,28 @@ class User(UserMixin):
 
     # decrement views if they need to be
     def handle_viewlist(self, ta_name):
-        id_user = current_user.id
-        current_session_user = db.child('users').child(id_user).get().val()
-
+        current_session_user = db.child('users').child(current_user.id).get().val()
         if self.ta_viewable(ta_name):
             return False
 
         # update db with decremented number of views
         current_session_user['remaining_views'] = current_session_user['remaining_views'] - 1
-        db.child('users').child(id_user).update(current_session_user)
+        db.child('users').child(current_user.id).update(current_session_user)
         # add new TA to the viewables list
         db.child('users').child(current_user.id).child('viewable_ta').push({'name': ta_name, 'rated': False})
         return True
-
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__)
 
     def encrypt(self,password_plain):
         passwd = password_plain.encode('utf-8')
-
         salt = bcrypt.gensalt()
         hashed = bcrypt.hashpw(passwd, salt)
-
-        return hashed.decode('utf-8') # convert it to string
+        # hashed password converted to string
+        return hashed.decode('utf-8')
 
     def decrypt(self,password_hashed,password_plain):
-        if bcrypt.checkpw(password_plain.encode('utf-8'),password_hashed.encode('utf-8')):
-            #match
+        if bcrypt.checkpw(password_plain.encode('utf-8'), password_hashed.encode('utf-8')):
             return True
-        else:
-            return False
+        return False
