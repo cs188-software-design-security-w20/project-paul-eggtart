@@ -56,14 +56,9 @@ $ python3 app.py
 
 ## Work In Progress / To Do
 FEATURES!
-- Payment System (getting more remaining views)
 - Encrypt End to End (Database) (Should we do more than just the password?)
 - Clean Up Frontend for Purchase.html
 - More feedback on Ratings/Login/Signup which didn't work?
-
-BUGS!
-- Next Password Reset Date 	<UnboundField(DateTimeField, ('password_reset',), {})>
-- $2b$12$iCztfwQpiF5.8itBy1n/IOe1sTE2ZFkafrUVDpeOqeunREmznFMjS PASSWORD SHOULD NOT BE SHOWN IN ACCOUNT / UNENCRYPT IT / MAKE IT CIRCLES
 
 TODO!
 - Take down firebase key!

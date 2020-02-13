@@ -3,6 +3,7 @@ import sys
 sys.path.append('./router_logic')
 
 # imports
+import datetime
 from flask import (
     current_app,
     Blueprint,
@@ -24,7 +25,6 @@ from search import searchBar, closest_match
 from profile.profile import User
 from load import database
 from itsdangerous import URLSafeTimedSerializer
-import datetime
 from flask_login import login_user, login_required, login_manager, current_user, logout_user
 from purchase import purchase_form
 from wtforms import ValidationError
@@ -43,13 +43,6 @@ router = Blueprint(
 @login_required
 def TA(ta_name):
     ta_object = db.child("TA").child(ta_name).get()
-
-    # get the TA information to display
-    comments = parse_ta_comments(ta_object)
-    ratings = parse_ta_ratings(ta_object)
-    classes = get_ta_classes(ta_object)
-    display_name = name_to_string(ta_name)
-    ta_info = (display_name, comments, ratings, classes)
 
     # adding comment to forum
     my_comment = comment_form()
@@ -70,28 +63,24 @@ def TA(ta_name):
 
     # render the template
     if ta_match(db, current_user.id, ta_name):
-        return render_template('ta_page.html', ta_info=ta_info, redirect='/TA/'+ta_name,
+        return render_template('ta_page.html', ta_info=get_ta_info(ta_object, ta_name), redirect='/TA/'+ta_name,
             comment_form=my_comment, rating_form=my_rating, ta_jpg= ta_name+".jpg")
     return render_template('search.html', form=search)
-
 
 @router.route('/search', methods=['GET', 'POST'])
 @login_required
 def search():
     search = searchBar()
     if search.validate_on_submit():
-        correction = closest_match(search.ta_name.data)
-        name = correction[0][0]
-        score = correction[0][1]
-
         user = User()
+        name, score = closest_match(search.ta_name.data)[0]
         num_views = user.number_views()
 
         if num_views is not None:
             if num_views <= 0 and not user.ta_viewable(name):
-                return render_template('purchase.html')
+                return redirect('/purchase_credits')
             # if match score less than 90, don't redirect and waste a view
-            if (score < 90):
+            if score < 90:
                 print("not_found")
                 return render_template('search.html', form=search)
             else:
@@ -99,8 +88,6 @@ def search():
                 return redirect('/TA/'+ name)
 
     return render_template('search.html', form=search)
-
-
 
 @router.route('/', methods=['GET', 'POST'])
 def home():
@@ -155,7 +142,7 @@ def profile():
     current_session_user = db.child("users").child(current_user.id).get().val()
     id = int(current_session_user['id'])
     user, ta_list = User().get_user(db, id)
-    print(ta_list)
+    # print(ta_list)
     context = {
         "user": user,
         "ta_list": ta_list
@@ -298,20 +285,18 @@ def confirm_email(token):
     print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
 
-
 @router.route('/purchase_credits', methods=['GET', 'POST'])
 @login_required
 def verify_card():
     form = purchase_form()
-    if form.validate_on_submit():
-        if(form.little.data): # purchased
-            if(form.process_payment(form.card.data)):
-                flash('Payment Processed successfully!')
-                user = db.child("users").child(current_user.id).get().val()
-                new_views = user["remaining_views"] + 10 # update views by 10
-                db.child("users").child(current_user.id).update({"remaining_views": new_views})
-            else:
-                flash('Bad credit card')
-    return render_template('purchase.html',form=form)
-
-
+    if form.validate_on_submit() and form.little.data:
+        # If payment was made successfully
+        if form.process_payment(form.card.data):
+            flash('Payment Processed successfully!')
+            user = db.child("users").child(current_user.id).get().val()
+            # update the number of views
+            new_views = user["remaining_views"] + 10
+            db.child("users").child(current_user.id).update({"remaining_views": new_views})
+        else:
+            flash('Bad credit card')
+    return render_template('purchase.html', form=form)
