@@ -58,7 +58,9 @@
                                 <td>
                                     <ul>
                                         {% for u in ta_list %}
-                                        <li><a href="/TA/{{ u }}">{{ u }}</a></li>
+                                            {% if u != "placeholder" %}
+                                                <li><a href="/TA/{{ u }}">{{ u }}</a></li>
+                                            {% endif %}
                                         {% endfor %}
                                     <ul>
                                 </td>
@@ -69,6 +71,9 @@
                 <div class="box-footer">
                     <a href="{{ url }}/edit?id={{ user.id }}">
                         <button class="btn btn-info pull-right">edit</button>
+                    </a>
+                    <a href="{{ url_for("router.verify_card") }}">
+                        <button class="btn btn-info pull-right">Purchase Credits</button>
                     </a>
                 </div>
 			</div>
