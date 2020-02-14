@@ -107,7 +107,7 @@ class User(UserMixin):
                     flash("Updated passwords do not match")
                     return "Fail"
                 if not re.match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$", attributes["password"]):
-                    flash("Password must have at least one letter, one number and one special character")
+                    flash("Password must have at least one letter, one number, one special character, and be at least 8 characters long")
                     return "Fail"
         if reset_password:
             if self.decrypt(current_user.password, attributes["password"]):

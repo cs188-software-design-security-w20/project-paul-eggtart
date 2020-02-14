@@ -144,9 +144,7 @@ def signup():
         flash('Thanks for registering! Please check your email for a confirmation email.', 'success')
         return redirect('/')
     else:
-        for error in signup_form.errors:
-            for e in signup_form.errors[error]:
-                flash(e)
+       flash('Invalid Form Sign up. Please try again.')
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/profile', methods=['GET'])
