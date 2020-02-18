@@ -155,8 +155,7 @@ class User(UserMixin):
     # Return whether the TA is viewable or not
     def ta_viewable(self, ta_name):
         ta_viewable_list = db.child('users').child(current_user.id).child('viewable_ta').get()
-        print(ta_viewable_list.val().items())
-        
+
         for _, val in ta_viewable_list.val().items():
             if val['name'] == ta_name:
                 return True
