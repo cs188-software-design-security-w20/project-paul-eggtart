@@ -29,7 +29,6 @@ class LoginForm(Form):
             if data['email'] == user.email and decrypter.decrypt(data["password"],user.password): #data["password"] == user.password:
                 if data['authenticated'] is False:
                     flash("Account not authenticated. Please reauthenticate.")
-                    print("here")
                     return -2
                 reset_date = data['password_reset']
                 reset_date_obj = datetime.datetime.strptime(reset_date, '%Y-%m-%dT%H:%M:%S.%f')

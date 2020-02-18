@@ -23,11 +23,9 @@ def send_email(subject, recipients, html_body):
     msg = Message(subject, recipients=recipients)
     msg.body = ""
     msg.html = html_body
-    print("about to send...")
     mail.send(msg)
 
 def send_password_reset_email(user_email):
-    print("Sending reset")
     password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 
     password_reset_url = url_for(

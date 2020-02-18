@@ -103,10 +103,7 @@ def login():
         login_result = login_form.login(user)
         if login_result >= 0:
             user.id = login_result
-            if login_user(user) == True:
-                print("Successful login")
-            else:
-                print("Unsuccessful")
+            login_user(user)
             return redirect(url_for('router.search'))
         if login_result == -1:
             flash("Incorrect email or password")
@@ -140,7 +137,6 @@ def profile():
     current_session_user = db.child("users").child(current_user.id).get().val()
     id = int(current_session_user['id'])
     user, ta_list = User().get_user(db, id)
-    # print(ta_list)
     context = {
         "user": user,
         "ta_list": ta_list
@@ -151,7 +147,6 @@ def profile():
 @login_required
 def profile_edit():
     id = request.args.get('id', None)
-    print(id)
     parameters = User().get_parameters()
     user, _ = User().get_user(db, id)
     context = {
@@ -186,7 +181,6 @@ def reauthenticate():
             data = u.val()
             if data['email'] == form.email.data:
                 found = True
-                print(data['authenticated'])
                 if data['authenticated'] is False:
                     signup.send_confirmation_email(form.email.data)
                     flash('Please check your email for an account confirmation link.', 'success')
@@ -227,8 +221,7 @@ def reset_with_token(token):
         password_reset_serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
         email = password_reset_serializer.loads(token, salt='password-reset-salt', max_age=3600)
     except:
-        print('reset link is invalid')
-        #flash('The password reset link is invalid or has expired.', 'error')
+        flash('The password reset link is invalid or has expired.', 'error')
         return redirect(url_for('router.home'))
  
     form = PasswordForm()
@@ -236,7 +229,6 @@ def reset_with_token(token):
     if form.validate_on_submit():
         found = False
         users = db.child("users").get()
-        print(users)
         for u in users.each():
             data = u.val()
             if data['email'] == email:
@@ -253,7 +245,6 @@ def reset_with_token(token):
                 db.child("users").child(id).update(payload)
                 curr_user.update_password_reset(id)
                 break
-        print('successful password reset?')
         flash('Your password has been updated!', 'success')
         return redirect(url_for('router.home'))
     return render_template('reset_password_with_token.html', form=form, token=token)
@@ -280,7 +271,6 @@ def confirm_email(token):
     else:
         db.child("users").child(user['id']).update({"authenticated": True})
         flash('Thank you for confirming your email address!')
-    print("Email authenticated for " + email)
     return redirect(url_for('router.home'))
 
 @router.route('/purchase_credits', methods=['GET', 'POST'])
