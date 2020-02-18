@@ -22,7 +22,12 @@ def get_ta_list():
         "paul-eggert",
         "tian-ye",
         "jeff-bezos",
-        "tim-cook"
+        "tim-cook",
+        "elon-musk",
+        "faker-hung",
+        "jack-ma",
+        "michael-pie",
+        "lebron-james"
     ]
 
     return ta_list
@@ -32,7 +37,12 @@ def name_to_string(ta_name):
         "paul-eggert": "Paul R. Eggert",
         "tian-ye": "Tian Ye",
         "jeff-bezos": "Jeff Bezos",
-        "tim-cook": "Tim Cook"
+        "tim-cook": "Tim Cook",
+        "elon-musk": "elon-musk",
+        "faker-hung": "Faker Hung",
+        "jack-ma": "Jack Ma",
+        "michael-pie": "Michael Pie",
+        "lebron-james": "Lebron James"
     }
 
     return dictionary[ta_name]

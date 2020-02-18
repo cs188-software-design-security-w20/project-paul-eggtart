@@ -39,6 +39,8 @@ router = Blueprint(
     template_folder='../templates'
 )
 
+
+
 @router.route('/TA/<ta_name>', methods=['GET', 'POST'])
 @login_required
 def TA(ta_name):

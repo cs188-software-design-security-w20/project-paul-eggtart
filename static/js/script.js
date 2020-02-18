@@ -5,7 +5,11 @@
         "Jeff Bezos": null,
         "Tim Cook": null,
         "Paul Eggert": null,
-        "superman": null
+        "Jack Ma": null,
+        "Faker Hung": null,
+        "Elon Musk": null,
+        "Michael Pie": null,
+        "Lebron James": null
       }
     });
     $(".dropdown-trigger").dropdown();
