@@ -22,7 +22,12 @@ def get_ta_list():
         "paul-eggert",
         "tian-ye",
         "jeff-bezos",
-        "tim-cook"
+        "tim-cook",
+        "elon-musk",
+        "faker-hung",
+        "jack-ma",
+        "michael-pie",
+        "lebron-james"
     ]
 
     return ta_list
@@ -32,7 +37,12 @@ def name_to_string(ta_name):
         "paul-eggert": "Paul R. Eggert",
         "tian-ye": "Tian Ye",
         "jeff-bezos": "Jeff Bezos",
-        "tim-cook": "Tim Cook"
+        "tim-cook": "Tim Cook",
+        "elon-musk": "Elon Musk",
+        "faker-hung": "Faker Hung",
+        "jack-ma": "Jack Ma",
+        "michael-pie": "Michael Pie",
+        "lebron-james": "Lebron James"
     }
 
     return dictionary[ta_name]
@@ -93,16 +103,12 @@ def get_ta_classes(ta_object):
 
 def submit_comment(db, ta_name, my_comment):
     comment_datetime = datetime.datetime.now().isoformat()
-    # print(my_comment.comment.data)
-    # print(comment_datetime)
     db.child('TA').child(ta_name).push({
         "comment": my_comment.comment.data,
         "comment_datetime": comment_datetime
     })
-    # print("pushed comment")
 
 def submit_rating(db, ta_name, my_rating):
-    # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
     db.child('TA').child(ta_name).push({
         "rating": {
             "clarity": my_rating.clarity.data, 
@@ -110,7 +116,6 @@ def submit_rating(db, ta_name, my_rating):
             "availability":my_rating.availability.data
         }
     })
-    # print("pushed rating")
 
 def ta_match(db, cur_user_id, ta_name):
     ta_viewable_list = db.child('users').child(cur_user_id).child('viewable_ta').get()

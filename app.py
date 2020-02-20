@@ -78,5 +78,6 @@ def load_user(user_id):
 def index():
     return redirect(url_for('router.home'))
 
+
 if __name__ == '__main__':
     app.run()

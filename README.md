@@ -4,7 +4,7 @@
 * [Introduction](#intro)
 * [Getting Started](#getting-started)
 * [Features](#features)
-* [Work In Progress / To Do](#work-in-progress/to-do)
+* [TA List](#ta-list)
 * [Sources](#sources)
 
 ## Introduction
@@ -54,15 +54,16 @@ $ python3 app.py
 
 
 
-## Work In Progress / To Do
-FEATURES!
-- Encrypt End to End (Database) (Should we do more than just the password?)
-- Clean Up Frontend for Purchase.html
-- More feedback on Ratings/Login/Signup which didn't work?
-
-TODO!
-- Take down firebase key!
-
+## TA List
+- Paul Eggert
+- Tian Ye
+- Jeff Bezos
+- Tim Cook
+- Elon Musk
+- Faker Hung
+- Jack Ma
+- Michael Pie
+- Lebron James
 
 
 

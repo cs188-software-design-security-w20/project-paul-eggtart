@@ -39,6 +39,8 @@ router = Blueprint(
     template_folder='../templates'
 )
 
+
+
 @router.route('/TA/<ta_name>', methods=['GET', 'POST'])
 @login_required
 def TA(ta_name):
@@ -49,8 +51,6 @@ def TA(ta_name):
     if my_comment.validate_on_submit():
         submit_comment(db, ta_name, my_comment)
         return redirect('/TA/'+ta_name)
-    else:
-        print("comment validate on submit failed...")
 
     # adding rating to TA
     my_rating = rating_form()
@@ -58,8 +58,6 @@ def TA(ta_name):
         if can_rate(db, current_user.id, ta_name):
             submit_rating(db, ta_name, my_rating)
         return redirect('/TA/'+ta_name)
-    else:
-        print("rating validate on submit failed...")
 
     # render the template
     if ta_match(db, current_user.id, ta_name):
@@ -81,7 +79,6 @@ def search():
                 return redirect('/purchase_credits')
             # if match score less than 90, don't redirect and waste a view
             if score < 90:
-                print("not_found")
                 return render_template('search.html', form=search)
             else:
                 user.handle_viewlist(name)
@@ -270,7 +267,6 @@ def confirm_email(token):
         if data['email'] == email:
             user = data
     
-    print(user)
     if user['authenticated']:
         flash('Account already confirmed. Please login.', 'info')
     else:
