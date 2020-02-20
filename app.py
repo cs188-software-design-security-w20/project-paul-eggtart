@@ -21,8 +21,15 @@ import load
 
 login_manager = LoginManager()
 
+
+csp = {
+    'default-src': '\'self\''
+}
+
+
 def create_app(config_file):
     app = Flask(__name__)
+    talisman = Talisman(app, content_security_policy=csp)
     app.config.from_object(config_file)
     csrf = CSRFProtect(app)
     csrf = CSRFProtect()
