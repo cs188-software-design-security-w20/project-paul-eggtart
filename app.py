@@ -1,4 +1,6 @@
 import os
+from flask import Flask
+from flask_talisman import Talisman, ALLOW_FROM
 from flask_login import LoginManager, login_manager
 from flask import (
     Flask,
