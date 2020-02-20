@@ -29,6 +29,8 @@ class User(UserMixin):
     password = StringField('password', validators=[DataRequired()])
     authenticated = BooleanField('authenticated', default=False)
     password_reset = DateTimeField('password_reset')
+    num_lockouts = IntegerField('num_lockouts', default=0)
+    last_lockout = DateTimeField('last_lockout')
     credits = IntegerField('credits', default=0)
     viewable_ta = FieldList('ta_name', StringField())
     remaining_views = IntegerField('remaining_views', default=3)
