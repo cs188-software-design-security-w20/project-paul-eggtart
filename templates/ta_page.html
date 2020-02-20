@@ -1,8 +1,9 @@
 <!-- Compiled and minified JavaScript -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link rel="stylesheet" href="../static/sass/materialize.css">
 
 <!-- Compiled and minified JavaScript -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/script.js')}}"></script>
 
 
 
@@ -33,14 +34,6 @@
 						<p>Clarity: {{ta_info[2][0]}}</p>
 						<p>Helpfulness: {{ta_info[2][1]}}</p>
 						<p>Availability: {{ta_info[2][2]}}</p>
-					</div>
-
-					<div class="card-reveal">
-						<span class="card-title grey-text text-darken-4">
-							{{ta_info[0]}}
-							<p>locked...</p>
-							<i class="material-icons right">close</i>
-						</span>
 					</div>
 				</div>
 				<p>
@@ -83,8 +76,6 @@
 
 			<!-- Upvote / Downvote -->
 			<div class="card-action center-align">
-				<a href="#">Upvote</a>
-				<a href="#">Downvote</a>
 			</div>
 		</div>
 	</div>

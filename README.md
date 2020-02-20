@@ -3,8 +3,8 @@
 ## Table of Contents
 * [Introduction](#intro)
 * [Getting Started](#getting-started)
-* [Navigating the Site](#navigating-the-site)
-* [Work In Progress / To Do](#work-in-progress/to-do)
+* [Features](#features)
+* [TA List](#ta-list)
 * [Sources](#sources)
 
 ## Introduction
@@ -35,22 +35,36 @@ $ pip install -r requirements.txt
 $ python3 app.py
 ```
 
-## Navigating the Site
-- /TA/paul-eggert
-- /search
 
-### Example Search (Closest Match)
-- tian-ye becomes tian-ye
-- tian becomes tian-ye
-- paul becomes paul-eggert
+## Features
+### Account Management
+- Creating a new account will give 3 'remaining views', the amount of TAs which the account can access
+- During the 'look up' of a new TA, a 'remaining view' will be used up, the TA will be added to your list
+- Attempting a direct lookup of a new TA will keep you on the search page (this will not use a token)
+
+### Sign Up / Login
+- Tracks which TAs are viewable by your account and how many more TAs may be added to that list
+- Access restricted for viewing non-viewable TA pages, taken to credit purchasing page
+- Verifies for @ucla.edu account upon sign-up
+- Password encryption 
+
+### Forum
+- Comments are allowed for viewable TA's as many times as necessary
+- Rating is allowed once per TA that is viewable by the account
 
 
-## Work In Progress / To Do
-- Payment System
-- Search Page
-- Login 
-- Signup
-- search to search_bar (*?)
+
+## TA List
+- Paul Eggert
+- Tian Ye
+- Jeff Bezos
+- Tim Cook
+- Elon Musk
+- Faker Hung
+- Jack Ma
+- Michael Pie
+- Lebron James
+
 
 
 ## Sources

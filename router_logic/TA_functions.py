@@ -10,7 +10,6 @@ from load import database
 import datetime
 
 
-
 ######################################################################################
 ######################################################################################
 ########################### T.A. NAMES, GLOBAL VARIABLES #############################
@@ -18,29 +17,35 @@ import datetime
 ######################################################################################
 
 
-
 def get_ta_list():
-
     ta_list = [
         "paul-eggert",
         "tian-ye",
         "jeff-bezos",
-        "tim-cook"
+        "tim-cook",
+        "elon-musk",
+        "faker-hung",
+        "jack-ma",
+        "michael-pie",
+        "lebron-james"
     ]
 
     return ta_list
 
 def name_to_string(ta_name):
-
     dictionary = {
         "paul-eggert": "Paul R. Eggert",
         "tian-ye": "Tian Ye",
         "jeff-bezos": "Jeff Bezos",
-        "tim-cook": "Tim Cook"
+        "tim-cook": "Tim Cook",
+        "elon-musk": "Elon Musk",
+        "faker-hung": "Faker Hung",
+        "jack-ma": "Jack Ma",
+        "michael-pie": "Michael Pie",
+        "lebron-james": "Lebron James"
     }
 
     return dictionary[ta_name]
-
 
 
 ######################################################################################
@@ -50,6 +55,12 @@ def name_to_string(ta_name):
 ######################################################################################
 
 
+def get_ta_info(ta_object, ta_name):
+    comments = parse_ta_comments(ta_object)
+    ratings = parse_ta_ratings(ta_object)
+    classes = get_ta_classes(ta_object)
+    display_name = name_to_string(ta_name)
+    return (display_name, comments, ratings, classes)
 
 def parse_ta_comments(ta_object):
     comments = []
@@ -61,8 +72,6 @@ def parse_ta_comments(ta_object):
             comments.append((val["comment"], str_datetime))
     
     return comments
-
-
 
 def parse_ta_ratings(ta_object):
     ratings = [0, [0, 0, 0]]
@@ -92,27 +101,34 @@ def get_ta_classes(ta_object):
 
     return classes
 
-
-
 def submit_comment(db, ta_name, my_comment):
     comment_datetime = datetime.datetime.now().isoformat()
-    # print(my_comment.comment.data)
-    # print(comment_datetime)
-    db.child("TA").child(ta_name).push({
+    db.child('TA').child(ta_name).push({
         "comment": my_comment.comment.data,
         "comment_datetime": comment_datetime
     })
-    # print("pushed comment")
-
-
 
 def submit_rating(db, ta_name, my_rating):
-    # print([my_rating.clarity.data, my_rating.helpfulness.data, my_rating.availability.data])
-    db.child("TA").child(ta_name).push({
+    db.child('TA').child(ta_name).push({
         "rating": {
             "clarity": my_rating.clarity.data, 
             "helpfulness": my_rating.helpfulness.data, 
             "availability":my_rating.availability.data
         }
     })
-    # print("pushed rating")
+
+def ta_match(db, cur_user_id, ta_name):
+    ta_viewable_list = db.child('users').child(cur_user_id).child('viewable_ta').get()
+    for _, val in ta_viewable_list.val().items():
+        if val['name'] == ta_name:
+            return True
+    return False
+
+def can_rate(db, cur_user_id, ta_name):
+    ta_viewable_list = db.child('users').child(cur_user_id).child('viewable_ta').get().val()
+    for key, val in ta_viewable_list.items():
+        if val['name'] == ta_name and not val['rated']:
+            val['rated'] = True
+            db.child('users').child(cur_user_id).child('viewable_ta').update(ta_viewable_list)
+            return True
+    return False
