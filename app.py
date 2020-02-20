@@ -23,16 +23,29 @@ login_manager = LoginManager()
 
 
 csp = {
-    'default-src': '\'self\''
+ 'default-src': [
+        '\'self\'',
+        'https://rate-my-ta.herokuapp.com/',
+        'https://cdnjs.cloudflare.com',
+        'https://fonts.googleapis.com/icon?family=Material+Icons',
+        'https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js',
+        'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js',
+        'http://farm8.staticflickr.com/7064/6858179818_5d652f531c_h.jpg',
+        'https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:400,300,600'
+
+
+    ]
 }
+
+
 
 
 def create_app(config_file):
     app = Flask(__name__)
-    talisman = Talisman(app, content_security_policy=csp)
+    talisman = Talisman(app, content_security_policy=None)
     app.config.from_object(config_file)
     csrf = CSRFProtect(app)
-    csrf = CSRFProtect()
+    #csrf = CSRFProtect()
     app.config['SECRET_KEY'] = os.environ.get("CSRF_KEY_SECRET")
     app.secret_key = b'\x06\x82\x96n\xfa\xbb(L\x97n\xb8.c\\y\x8a'
     login_manager.init_app(app)
@@ -89,4 +102,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

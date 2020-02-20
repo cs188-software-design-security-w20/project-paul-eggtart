@@ -29,6 +29,8 @@ from flask_login import login_user, login_required, login_manager, current_user,
 from purchase import purchase_form
 from wtforms import ValidationError
 
+from flask_talisman import Talisman, ALLOW_FROM
+
 
 # define the database
 db = database()
