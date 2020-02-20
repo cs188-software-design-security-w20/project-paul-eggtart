@@ -109,7 +109,6 @@ def login():
     return render_template('index.html', login_form=LoginForm(), signup_form=SignUpForm())
 
 @router.route('/logout', methods=['GET'])
-@login_required
 def logout():
     logout_user()
     return redirect(url_for('router.home'))
