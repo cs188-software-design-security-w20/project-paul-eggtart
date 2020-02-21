@@ -45,6 +45,9 @@ class SignUpForm(FlaskForm):
         reset_date = datetime.datetime.now() + datetime.timedelta(6*365/12)
         new_user.password_reset = reset_date.isoformat()
         new_user.credits = 0
+        new_user.num_lockouts = 0
+        last_lockout = datetime.datetime.now()
+        new_user.last_lockout = last_lockout.isoformat()
         new_user.viewable_ta = ""
         new_user.remaining_views = 3
 
