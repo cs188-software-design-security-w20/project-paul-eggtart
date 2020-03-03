@@ -1,6 +1,4 @@
 import os
-from flask import Flask
-from flask_talisman import Talisman, ALLOW_FROM
 from flask_login import LoginManager, login_manager
 from flask import (
     Flask,
@@ -20,8 +18,6 @@ import load
 
 
 login_manager = LoginManager()
-
-
 
 csp = {
     'default-src': [
@@ -49,13 +45,16 @@ csp = {
 
 }
 
-
 def create_app(config_file):
     app = Flask(__name__)
-    talisman = Talisman(app, content_security_policy=None)
     app.config.from_object(config_file)
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE='Lax',
+    )
     csrf = CSRFProtect(app)
-    #csrf = CSRFProtect()
+    csrf = CSRFProtect()
     app.config['SECRET_KEY'] = os.environ.get("CSRF_KEY_SECRET")
     app.secret_key = b'\x06\x82\x96n\xfa\xbb(L\x97n\xb8.c\\y\x8a'
     login_manager.init_app(app)
@@ -110,6 +109,11 @@ def load_user(user_id):
 def index():
     return redirect(url_for('router.home'))
 
+@app.after_request
+def add_header(response):
+    response.headers["Cache_Control"] = "no-cache, no-store, must-revalidate, max-age=0"
+    response.set_cookie('username', 'flask', secure=True, httponly=True, samesite='Lax')
+    return response
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
